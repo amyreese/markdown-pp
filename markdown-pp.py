@@ -7,7 +7,7 @@ from os import path
 import re
 import sys
 
-tocre = re.compile("!TOC")
+tocre = re.compile("^!TOC\s*$")
 atxre = re.compile("^(#+)\s*(.+)$")  
 setextre = re.compile("^(=+|-+)\s*$")
 
