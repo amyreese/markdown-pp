@@ -113,7 +113,7 @@ class MarkdownPPStatus:
 			else:
 				header.section = ".".join([str(x) for x in stack]) + ".%d\\. " % headernum
 
-			self.toc += "%s [%s](#%s)  \n" % (header.section, header.title, header.id)
+			self.toc += "%s [%s](#%s)\n" % (header.section, header.title, header.id)
 			self.input[linenum] = re.sub(header.title, header.section + header.title, self.input[linenum])
 
 	def __str__(self):
