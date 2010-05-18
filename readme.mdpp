@@ -31,18 +31,18 @@ Example file.mdpp:
 
 The preprocessor would generate the following Markdown-ready document file.md:
 
-	<a name="documenttitle"/>
+	<a name="documenttitle"></a>
 	# Document Title
 
 	1\. [Header 1](#header1)
 	1.1\. [Header 1.a](#header1a)
 	2\. [Header 2](#header2)
 
-	<a name="header1"/>
+	<a name="header1"></a>
 	## Header 1
-	<a name="header1a"/>
+	<a name="header1a"></a>
 	### Header 1.a
-	<a name="header2"/>
+	<a name="header2"></a>
 	## Header 2
 
 Support

@@ -1,5 +1,5 @@
 
-<a name="markdownpreprocessor"/>
+<a name="markdownpreprocessor"></a>
 Markdown Preprocessor
 ======================
 
@@ -11,7 +11,7 @@ something as heavy and syntactically complex as Docbook.
 1\.  [Features](#features)
 2\.  [Support](#support)
 
-<a name="features"/>
+<a name="features"></a>
 1\. Features
 --------
 
@@ -34,21 +34,21 @@ Example file.mdpp:
 
 The preprocessor would generate the following Markdown-ready document file.md:
 
-	<a name="documenttitle"/>
+	<a name="documenttitle"></a>
 	# Document Title
 
 	1\. [Header 1](#header1)
 	1.1\. [Header 1.a](#header1a)
 	2\. [Header 2](#header2)
 
-	<a name="header1"/>
+	<a name="header1"></a>
 	## Header 1
-	<a name="header1a"/>
+	<a name="header1a"></a>
 	### Header 1.a
-	<a name="header2"/>
+	<a name="header2"></a>
 	## Header 2
 
-<a name="support"/>
+<a name="support"></a>
 2\. Support
 -------
 

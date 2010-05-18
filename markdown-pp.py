@@ -149,7 +149,7 @@ class MarkdownPP:
 		for line in status.input:
 			if status.headers.has_key(linenum):
 				header = status.headers[linenum]
-				file.write("<a name=\"%s\"/>\n" % header.id) 
+				file.write("<a name=\"%s\"></a>\n" % header.id)
 
 			if linenum in status.toclines:
 				file.write(status.toc)
