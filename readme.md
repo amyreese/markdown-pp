@@ -9,7 +9,9 @@ are mainly focused on creating larger technical documents without needing to use
 something as heavy and syntactically complex as Docbook.
 
 1\.  [Features](#features)  
-2\.  [Support](#support)  
+2\.  [Examples](#examples)  
+3\.  [Support](#support)  
+4\.  [References](#references)  
 
 <a name="features"></a>
 1\. Features
@@ -22,6 +24,17 @@ markup.  The table is inserted into the document wherever the preprocessor finds
 Markdown header, and the headings are numbered hierarchically based on the
 heading tag that Markdown would generate.
 
+Similarly, markdown-pp can generate a list of references that follow Markdown's
+alternate link syntax, eg `[name]: <url> "Title"`.  A list of links will be
+inserted wherever the preprocessor finds a line beginning with `!REF`.  The
+generated reference list follows the same alternate linking method to ensure
+consistency in your document, but the link need not be referenced anywhere in
+the document to be included in the list.
+
+<a name="examples"></a>
+2\. Examples
+--------
+
 Example file.mdpp:
 
 	# Document Title
@@ -31,6 +44,10 @@ Example file.mdpp:
 	## Header 1
 	### Header 1.a
 	## Header 2
+
+	!REF
+
+	[github]: http://github.com "GitHub"
 
 The preprocessor would generate the following Markdown-ready document file.md:
 
@@ -48,13 +65,23 @@ The preprocessor would generate the following Markdown-ready document file.md:
 	<a name="header2"></a>
 	## Header 2
 
+	*	[GitHub][github]
+
+	[github]: http://github.com "GitHub"
+
 <a name="support"></a>
-2\. Support
+3\. Support
 -------
 
 If you find any problems with Markdown-PP, or have any feature requests, please
 report them to [my bugtracker][1], and I will respond when possible.  Code
 cantributions are *always* welcome.
 
-[1] http://leetcode.net/mantis
+<a name="references"></a>
+4\. References
+----------
+
+*	[LeetCode.net Bugtracker][1]
+
+[1]: http://leetcode.net/mantis "LeetCode.net Bugtracker"
 

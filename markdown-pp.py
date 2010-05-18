@@ -11,6 +11,9 @@ tocre = re.compile("^!TOC\s*$")
 atxre = re.compile("^(#+)\s*(.+)$")  
 setextre = re.compile("^(=+|-+)\s*$")
 
+refre = re.compile("^!REF\s*$")
+linkre = re.compile("^\[([^\]]+)\]:\s+(\S+)(?:\s*[\"'\(](.+)[\"'\(]\s*)?$")
+
 class MarkdownPPHeader:
 	depth = 0
 	title = ""
@@ -19,10 +22,25 @@ class MarkdownPPHeader:
 	def __init__(self, depth, title):
 		self.depth = depth
 		self.title = title
-		self.id = re.sub("(\s+)", "", title).lower()
+		self.id = re.sub("([\s,-]+)", "", title).lower()
 
 	def __str__(self):
 		return "Header(depth: %d, id: %s)" % (self.depth, self.id)
+
+	def __unicode__(self):
+		return self.__str__()
+
+class MarkdownPPLink:
+	name = ""
+	title = ""
+
+	def __init__(self, name, title):
+		self.name = name
+		self.title = "" if title is None else title.strip()
+		self.title = name if title == "" else self.title
+
+	def __str__(self):
+		return "Link(name: %s, title: %s)" % (self.name, self.title)
 
 	def __unicode__(self):
 		return self.__str__()
@@ -33,15 +51,17 @@ class MarkdownPPStatus:
 	headers = {}
 	toc = ""
 	
+	reflines = []
+	links = []
+	ref = ""
+
 	def __init__(self, file):
 		self.input = file.readlines()
 
-	def process(self):
-		lastline = None
-		linenum = 0
-
+	def depthoffset(self):
 		tocfound = False
 		lowestdepth = 10
+
 		for line in self.input:
 			match = tocre.search(line)
 			if match:
@@ -62,7 +82,13 @@ class MarkdownPPStatus:
 				if depth < lowestdepth:
 					lowestdepth = depth
 
-		depthoffset = 1 - lowestdepth
+		return 1 - lowestdepth
+
+	def process(self):
+		lastline = None
+		linenum = 0
+
+		depthoffset = self.depthoffset()
 
 		for line in self.input:
 			match = tocre.search(line)
@@ -81,6 +107,18 @@ class MarkdownPPStatus:
 				depth += depthoffset
 				title = lastline.strip()
 				self.headers[linenum-1] = MarkdownPPHeader(depth, title)
+
+			match = refre.search(line)
+			if match:
+				self.reflines.append(linenum)
+
+			match = linkre.search(line)
+			if match:
+				name = match.group(1)
+				title = ""
+				if len(match.groups()) > 2:
+					title = match.group(3)
+				self.links.append(MarkdownPPLink(name, title))
 
 			lastline = line
 			linenum += 1
@@ -115,6 +153,9 @@ class MarkdownPPStatus:
 
 			self.toc += "%s [%s](#%s)  \n" % (header.section, header.title, header.id)
 			self.input[linenum] = re.sub(header.title, header.section + header.title, self.input[linenum])
+
+		for link in self.links:
+			self.ref += "*\t[%s][%s]\n" % (link.title, link.name)
 
 	def __str__(self):
 		return "MarkdownPPStatus: \n\ttoclines: %s\n\theaders: %s" % (str(self.toclines), str(self.headers))
@@ -153,6 +194,10 @@ class MarkdownPP:
 
 			if linenum in status.toclines:
 				file.write(status.toc)
+				line = ""
+
+			if linenum in status.reflines:
+				file.write(status.ref)
 				line = ""
 
 			file.write(line)
