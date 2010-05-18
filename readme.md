@@ -8,8 +8,8 @@ on top of the excellent Markdown syntax defined by John Gruber.  These additions
 are mainly focused on creating larger technical documents without needing to use
 something as heavy and syntactically complex as Docbook.
 
-1\.  [Features](#features)
-2\.  [Support](#support)
+1\.  [Features](#features)  
+2\.  [Support](#support)  
 
 <a name="features"></a>
 1\. Features
