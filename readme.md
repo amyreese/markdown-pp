@@ -10,7 +10,7 @@ something as heavy and syntactically complex as Docbook.
 The biggest feature provided by markdown-pp is the generation of a table of
 contents for a document, with each item linked to the appropriate section of the
 markup.  The table is inserted into the document wherever the preprocessor finds
-`!TOC` at the beginning of a line.  Named <a> tags are inserted above each
+`!TOC` at the beginning of a line.  Named `<a>` tags are inserted above each
 Markdown header, and the headings are numbered hierarchically based on the
 heading tag that Markdown would generate.
 
