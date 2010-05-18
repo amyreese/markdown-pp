@@ -172,7 +172,7 @@ class MarkdownPP:
 
 		if output is None:
 			root, ext = path.splitext(filename)
-			ofile = open(root + ".mdpp", "w")
+			ofile = open(root + ".md", "w")
 			self.write(status, ofile)
 			ofile.close()
 		else:
