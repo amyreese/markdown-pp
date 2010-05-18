@@ -1,5 +1,4 @@
 
-<a name="markdownpreprocessor"/>
 Markdown Preprocessor
 ======================
 
@@ -8,11 +7,9 @@ on top of the excellent Markdown syntax defined by John Gruber.  These additions
 are mainly focused on creating larger technical documents without needing to use
 something as heavy and syntactically complex as Docbook.
 
-1\.  [Features](#features)
-2\.  [Support](#support)
+!TOC
 
-<a name="features"/>
-1\. Features
+Features
 --------
 
 The biggest feature provided by markdown-pp is the generation of a table of
@@ -48,8 +45,7 @@ The preprocessor would generate the following Markdown-ready document file.md:
 	<a name="header2"/>
 	## Header 2
 
-<a name="support"/>
-2\. Support
+Support
 -------
 
 If you find any problems with Markdown-PP, or have any feature requests, please
