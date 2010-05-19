@@ -1,5 +1,4 @@
 
-<a name="markdownpreprocessor"></a>
 Markdown Preprocessor
 ======================
 

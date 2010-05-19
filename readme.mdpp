@@ -45,7 +45,6 @@ Example file.mdpp:
 
 The preprocessor would generate the following Markdown-ready document file.md:
 
-	<a name="documenttitle"></a>
 	# Document Title
 
 	1\. [Header 1](#header1)
