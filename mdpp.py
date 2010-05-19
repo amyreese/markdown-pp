@@ -4,10 +4,11 @@ import MarkdownPP
 mdpp = open("readme.mdpp","r")
 md = open("readme","w")
 
-module = MarkdownPP.Module()
+classdef = MarkdownPP.modules["include"]
+module = classdef()
 
-pp = MarkdownPP.Process()
-pp.register(module)
+pp = MarkdownPP.Processor()
+#pp.register(module)
 
 pp.input(mdpp)
 pp.process()

@@ -1,8 +1,7 @@
 # Copyright (C) 2010 John Reese
 # Licensed under the MIT license
 
-
-class Process:
+class Processor:
 	"""
 	Framework for allowing modules to modify the input data as a set of transforms.
 	Once the original input data is loaded, the preprocessor iteratively allows
@@ -11,7 +10,7 @@ class Process:
 	data is used for the next pass.  Once all modules have transformed the data, it
 	is ready for writing out to a file.
 	"""
-	
+
 	data = []
 	transforms = {}
 	modules = []
