@@ -2,7 +2,9 @@
 # Licensed under the MIT license
 
 import re
-from MarkdownPP import Module, Transform
+
+from MarkdownPP.Module import Module
+from MarkdownPP.Transform import Transform
 
 tocre = re.compile("^!TOC\s*$")
 atxre = re.compile("^(#+)\s*(.+)$")  
