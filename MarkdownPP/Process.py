@@ -32,6 +32,8 @@ class Process:
 		"""
 		This method handles the actual processing of Modules and Transforms
 		"""
+		self.modules.sort(cmp=lambda x,y: cmp(x.priority, y.priority))
+
 		for module in self.modules:
 			transforms = module.transform(self.data)
 			transforms.sort(cmp=lambda x,y: cmp(x.linenum, y.linenum), reverse=True)
