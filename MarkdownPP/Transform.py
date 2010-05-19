@@ -12,3 +12,11 @@ class Transform:
 	oper = "noop"
 	data = ""
 
+	def __init__(self, linenum = -1, oper = "noop", data = ""):
+		self.linenum = linenum
+		self.oper = oper
+		self.data = data
+
+	def __str__(self):
+		return "Transform: (line: %d, oper: %s, data: %s)" % (self.linenum, self.oper, self.data)
+
