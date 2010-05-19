@@ -5,15 +5,9 @@ from Transform import Transform
 
 class Module:
 
-	toc = -1
-
-	def process(self, linenum, line):
-		if line == "!TOC":
-			self.toc = linenum
-
-	def transforms(self):
+	def transform(self, data):
 		tform = Transform()
-		tform.linenum = self.toc
+		tform.linenum = 3
 		tform.oper = "swap"
 		tform.data = "TIC TOC"
 

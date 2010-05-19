@@ -18,44 +18,33 @@ class Process:
 		self.data = file.readlines()
 
 	def process(self):
-		linenum = 0
-		for line in self.data:
-			for module in self.modules:
-				module.process(linenum, line)
-
-			linenum += 1
-
 		for module in self.modules:
-			for transform in module.transforms():
-				if transform.linenum not in self.transforms:
-					self.transforms[transform.linenum] = []
-				self.transforms[transform.linenum].append(transform)
+			transforms = module.transform(self.data)
+			transforms.sort(cmp=lambda x,y: cmp(x.linenum, y.linenum), reverse=True)
+
+			for transform in transforms:
+				linenum = transform.linenum
+
+				if   transform.oper == "prepend":
+					self.data[linenum:linenum] = transform.data
+
+				elif transform.oper == "append":
+					self.data[linenum+1:linenum+1] = transform.data
+
+				elif transform.oper == "swap":
+					self.data[linenum:linenum+1] = transform.data
+
+				elif transform.oper == "drop":
+					self.data[linenum:linenum+1] = []
+
+				elif transform.oper == "noop":
+					pass
 
 	def output(self, file):
 		linenum = 0
 		for line in self.data:
-			if linenum in self.transforms:
-				for transform in self.transforms:
-
-					if   transform.oper == "prepend":
-						line = transform.data + line
-
-					elif transform.oper == "append":
-						line = line + transform.data
-
-					elif transform.oper == "swap":
-						line = transform.data
-
-					elif transform.oper == "drop":
-						line = None
-
-					elif transform.oper == "noop":
-						pass
-
 			if not line is None:
 				file.write(line)
 
 			linenum += 1
-
-			
 
