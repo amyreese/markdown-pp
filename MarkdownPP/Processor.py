@@ -40,6 +40,9 @@ class Processor:
 			for transform in transforms:
 				linenum = transform.linenum
 
+				if isinstance(transform.data, str):
+					transform.data = [transform.data]
+
 				if   transform.oper == "prepend":
 					self.data[linenum:linenum] = transform.data
 
