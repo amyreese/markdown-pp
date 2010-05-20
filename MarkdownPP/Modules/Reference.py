@@ -23,7 +23,7 @@ class Reference(Module):
 		reflines = []
 		refdata = ""
 
-		links = {}
+		links = []
 
 		# iterate through the document looking for !REF markers and links
 		linenum = 0
@@ -42,7 +42,7 @@ class Reference(Module):
 				else:
 					title = name.lower()
 
-				links[name] = title
+				links.append((name,title))
 
 			linenum += 1
 
@@ -50,7 +50,7 @@ class Reference(Module):
 		if not reffound:
 			return []
 
-		for name, title in links.items():
+		for name, title in links:
 			refdata += "*\t[%s][%s]\n" % (title, name)
 
 		# create transforms for each marker
