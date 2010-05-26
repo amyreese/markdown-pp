@@ -103,7 +103,7 @@ class TableOfContents(Module):
 			tocdata += "%s [%s](#%s)  \n" % (section, title, short)
 
 			transforms.append(Transform(linenum, "swap", re.sub(title, section + title, data[linenum])))
-			transforms.append(Transform(linenum, "prepend", "<a name=\"%s\"></a>\n" % short))
+			transforms.append(Transform(linenum, "prepend", "<a name=\"%s\"></a>\n\n" % short))
 
 		# create transforms for the !TOC markers
 		for linenum in toclines:
