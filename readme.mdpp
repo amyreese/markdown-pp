@@ -21,8 +21,52 @@ and process that document when viewing the repository.
 
 !TOC
 
+Installation and Usage
+----------------------
+
+Currently, you'll need to download the source code from [GitHub][2] or clone
+the repository.  There are two components to the project: a Python module,
+`MarkdownPP`, and a Python script that acts as a simple command line interface
+to the module, `markdown-pp.py`.
+
+Assuming you have a file named `foo.mdpp`, you can generate the preprocessed
+file `foo.md` by running the following command:
+
+    $ path/to/markdown-pp.py foo.mdpp foo.md
+
+Because the current CLI script is very simple, it just automatically selects
+all available modules for the preprocessor to use.  I will eventually get to
+the point of adding command parameters and switches to select modules.  In the
+mean time, if you only want to use a subset of modules, you can either modify
+`markdown-pp.py` directly, or duplicate its usage of the core module with your
+own list of preferred modules.
+
 Modules
 --------
+
+### Includes
+
+In order to facilitate large documentation projects, MarkdownPP has an Include
+module that will replace a line of the form `!INCLUDE "path/to/filename"` with
+the contents of that file, recursively including other files as needed.
+
+File `foo.mdpp`:
+
+	Hello
+
+File `bar.mdpp`:
+
+	World!
+
+File `index.mdpp`:
+
+	!INCLUDE "foo.mdpp"
+	!INCLUDE "bar.mdpp"
+
+Compiling `index.mdpp` with the Include module will produce the following:
+
+	Hello
+	World!
 
 ### Table of Contents
 
@@ -83,7 +127,8 @@ Support
 
 If you find any problems with MarkdownPP, or have any feature requests, please
 report them to [my bugtracker][1], and I will respond when possible.  Code
-cantributions are *always* welcome.
+contributions are *always* welcome, and ideas for new modules, or additions to
+existing modules, are also appreciated.
 
 References
 ----------
@@ -91,4 +136,5 @@ References
 !REF
 
 [1]: http://leetcode.net/mantis "LeetCode.net Bugtracker"
+[2]: http://github.com/jreese/markdown-pp "Markdown Preprocessor on GitHub"
 
