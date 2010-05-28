@@ -7,13 +7,17 @@ import sys
 import MarkdownPP
 
 if len(sys.argv) > 2:
-	infile = sys.argv[1]
-	outfile = sys.argv[2]
+	mdpp = open(sys.argv[1], "r")
+	md = open(sys.argv[2], "w")
+
+elif len(sys.argv) > 1:
+	mdpp = open(sys.argv[1], "r")
+	md = sys.stdout
+
 else:
 	sys.exit(1)
-
-mdpp = open(infile, "r")
-md = open(outfile, "w")
 	
 MarkdownPP.MarkdownPP(input=mdpp, output=md, modules=MarkdownPP.modules.keys())
 
+mdpp.close()
+md.close()
