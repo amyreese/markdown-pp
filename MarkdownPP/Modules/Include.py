@@ -44,8 +44,6 @@ class Include(Module):
 		if not path.isabs(filename):
 			filename = path.join(pwd, filename)
 
-		print(filename)
-
 		if path.isfile(filename):
 			f = open(filename, "r")
 			data = f.readlines()

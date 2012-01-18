@@ -6,8 +6,8 @@ import re
 from MarkdownPP.Module import Module
 from MarkdownPP.Transform import Transform
 
-tocre = re.compile("^!TOC\s*$")
-atxre = re.compile("^(#+)\s*(.+)$")  
+tocre = re.compile("^!TOC(\s+[1-6])?\s*$")
+atxre = re.compile("^(#+)\s*(.+)$")
 setextre = re.compile("^(=+|-+)\s*$")
 
 class TableOfContents(Module):
@@ -24,6 +24,7 @@ class TableOfContents(Module):
 
 		tocfound = False
 		toclines = []
+		tocdepth = 0
 		tocdata = ""
 
 		headers = {}
@@ -36,6 +37,10 @@ class TableOfContents(Module):
 			match = tocre.search(line)
 			if match:
 				tocfound = True
+				depth = match.group(1)
+				if depth is not None:
+					depth = int(depth)
+					tocdepth = max(depth, tocdepth)
 				toclines.append(linenum)
 
 			# hash headers
@@ -64,6 +69,9 @@ class TableOfContents(Module):
 		# short circuit if no !TOC directive
 		if not tocfound:
 			return []
+
+		if tocdepth == 0:
+			tocdepth = 6
 
 		stack = []
 		headernum = 0
@@ -94,6 +102,9 @@ class TableOfContents(Module):
 				lastdepth -= 1
 
 			headernum += 1
+
+			if depth > tocdepth:
+				continue
 
 			if depth == 1:
 				section = "%d\\. " % headernum
