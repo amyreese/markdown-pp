@@ -9,6 +9,7 @@ from MarkdownPP.Transform import Transform
 tocre = re.compile("^!TOC(\s+[1-6])?\s*$")
 atxre = re.compile("^(#+)\s*(.+)$")
 setextre = re.compile("^(=+|-+)\s*$")
+fencedcodere = re.compile("^```")
 
 class TableOfContents(Module):
 	"""
@@ -29,9 +30,21 @@ class TableOfContents(Module):
 
 		headers = {}
 
+		infencedcodeblock = False
+
 		# iterate through the document looking for markers and headers
 		linenum = 0
 		for line in data:
+
+			# Fenced code blocks (Github-flavored markdown)
+			match = fencedcodere.search(line)
+			if match:
+				if infencedcodeblock:
+					infencedcodeblock = False
+				else:
+					infencedcodeblock = True
+			if infencedcodeblock:
+				continue
 
 			# !TOC markers
 			match = tocre.search(line)
