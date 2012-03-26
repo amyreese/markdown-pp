@@ -9,7 +9,7 @@ from MarkdownPP.Transform import Transform
 tocre = re.compile("^!TOC(\s+[1-6])?\s*$")
 atxre = re.compile("^(#+)\s*(.+)$")
 setextre = re.compile("^(=+|-+)\s*$")
-fencedcodere = re.compile("^```")
+fencedcodere = re.compile("^```\w*$")
 
 class TableOfContents(Module):
 	"""
@@ -43,8 +43,6 @@ class TableOfContents(Module):
 					infencedcodeblock = False
 				else:
 					infencedcodeblock = True
-			if infencedcodeblock:
-				continue
 
 			# !TOC markers
 			match = tocre.search(line)
@@ -58,7 +56,7 @@ class TableOfContents(Module):
 
 			# hash headers
 			match = atxre.search(line)
-			if match:
+			if match and not infencedcodeblock:
 				depth = len(match.group(1))
 				title = match.group(2).strip()
 				headers[linenum] = (depth, title)
@@ -68,7 +66,7 @@ class TableOfContents(Module):
 
 			# underlined headers
 			match = setextre.search(line)
-			if match:
+			if match and not infencedcodeblock:
 				depth = 1 if match.group(1)[0] == "=" else 2
 				title = lastline.strip()
 				headers[linenum-1] = (depth, title)
