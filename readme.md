@@ -24,6 +24,7 @@ and process that document when viewing the repository.
 2.1\.  [Includes](#includes)  
 2.2\.  [Table of Contents](#tableofcontents)  
 2.3\.  [Reference](#reference)  
+2.4\.  [LaTeX Rendering](#latexrendering)  
 3\.  [Examples](#examples)  
 4\.  [Support](#support)  
 5\.  [References](#references)  
@@ -102,6 +103,22 @@ inserted wherever the preprocessor finds a line beginning with `!REF`.  The
 generated reference list follows the same alternate linking method to ensure
 consistency in your document, but the link need not be referenced anywhere in
 the document to be included in the list.
+
+<a name="latexrendering"></a>
+
+### 2.4\. LaTeX Rendering
+
+Lines and blocks of lines beginning and ending with $ are rendered as LaTeX,
+using [QuickLaTeX](http://www.holoborodko.com/pavel/quicklatex/).
+
+For example,
+
+	$\displaystyle \int x^2 = \frac{x^3}{3} + C$
+
+becomes
+
+![\displaystyle \int x^2 = \frac{x^3}{3} + C](http://quicklatex.com/cache3/ql_0fa1a137ae5e89171b4ecb24ce76998f_l3.png "\displaystyle \int x^2 = \frac{x^3}{3} + C")
+
 
 <a name="examples"></a>
 
