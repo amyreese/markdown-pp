@@ -1,4 +1,4 @@
-# Copyright (C) 2010 John Reese
+# Copyright (C) 2012 Alex Nisnevich
 # Licensed under the MIT license
 
 import re
@@ -18,24 +18,6 @@ class LaTeXRender(Module):
 	Rendering is performed using QuickLaTeX via ProblemSetMarmoset.
 	"""
 	
-	def render(self, formula):
-		formula = formula.replace("$", "")
-		encoded_formula = formula.replace("%","[comment]").replace("+","%2B")
-		display_formula = formula.replace("\n","")
-		print 'Rendering: %s ...' % display_formula
-		
-		params = urllib.urlencode({'engine': 'quicklatex', 'input': encoded_formula})
-		headers = {"Content-type": "application/x-www-form-urlencoded",
-		           "Accept": "text/plain"}
-		conn = httplib.HTTPConnection("www.problemsetmarmoset.com")
-		
-		conn.request("POST", "/latex/render.php", params, headers)
-		response = conn.getresponse()
-		img_url = response.read()
-		
-		rendered_tex = '![{}]({})\n'.format(display_formula, img_url)
-		return rendered_tex
-
 	def transform(self, data):
 		transforms = []
 		linenum = 0
@@ -44,22 +26,23 @@ class LaTeXRender(Module):
 		in_fenced_code_block = False
 		
 		for line in data:
-			# Fenced code blocks (Github-flavored markdown)
-			match = fencedcodere.search(line)
-			if match:
+			# Handling fenced code blocks (for Github-flavored markdown)
+			if fencedcodere.search(line):
 				if in_fenced_code_block:
 					in_fenced_code_block = False
 				else:
 					in_fenced_code_block = True
 			
-			is_code_block = codere.search(line)
-			if not in_fenced_code_block and not is_code_block:
+			# Are we in a code block?
+			if not in_fenced_code_block and not codere.search(line):
+				# Is this line part of an existing LaTeX block?
 				if in_block:
 					transforms.append(Transform(linenum, "drop"))
 					current_block += "\n" + line
 					
 				match = singlelinere.search(line)
 				if match:
+					# Single LaTeX line
 					tex = match.group(0)
 					before_tex = line[0:line.find(tex)]
 					after_tex = line[(line.find(tex) + len(tex)) : len(line)]
@@ -67,10 +50,13 @@ class LaTeXRender(Module):
 				else:
 					match = startorendre.search(line)
 					if match:
+						# Starting or ending a multi-line LaTeX block
 						if in_block:
+							# Ending a LaTeX block
 							transforms.pop() # undo last drop
 							transforms.append(Transform(linenum, "swap", self.render(current_block)))
 						else:
+							# Starting a LaTeX block
 							current_block = line
 							transforms.append(Transform(linenum, "drop"))
 						in_block = not in_block
@@ -78,3 +64,25 @@ class LaTeXRender(Module):
 			linenum += 1
 
 		return transforms
+
+	def render(self, formula):
+		# Prepare the formula
+		formula = formula.replace("$", "")
+		encoded_formula = formula.replace("%","[comment]").replace("+","%2B")
+		display_formula = formula.replace("\n","")
+		print 'Rendering: %s ...' % display_formula
+		
+		# Prepare POST request to QuickLaTeX via ProblemSetMarmoset (for added processing)
+		params = urllib.urlencode({'engine': 'quicklatex', 'input': encoded_formula})
+		headers = {"Content-type": "application/x-www-form-urlencoded",
+		           "Accept": "text/plain"}
+		conn = httplib.HTTPConnection("www.problemsetmarmoset.com")
+		
+		# Make the request
+		conn.request("POST", "/latex/render.php", params, headers)
+		response = conn.getresponse()
+		img_url = response.read()
+		
+		# Display as Markdown image
+		rendered_tex = '![{0}]({1} "{0}")\n'.format(display_formula, img_url)
+		return rendered_tex
