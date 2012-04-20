@@ -86,6 +86,16 @@ generated reference list follows the same alternate linking method to ensure
 consistency in your document, but the link need not be referenced anywhere in
 the document to be included in the list.
 
+### LaTeX Rendering
+
+For example,
+
+	$\displaystyle \int x^2 = \frac{x^3}{3} + C$
+
+becomes
+
+$\displaystyle \int x^2 = \frac{x^3}{3} + C$
+
 Examples
 --------
 

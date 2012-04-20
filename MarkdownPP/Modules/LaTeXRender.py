@@ -7,8 +7,8 @@ import httplib, urllib
 from MarkdownPP.Module import Module
 from MarkdownPP.Transform import Transform
 
-blockre = re.compile("\$(\$?)..*\$(\$?)")
-singlere = re.compile("\$(\$?)")
+singlelinere = re.compile("^\$(\$?)..*\$(\$?)$")
+startorendre = re.compile("^\$(\$?)|^\S.*\$(\$?)$")
 
 class LaTeXRender(Module):
 	"""
@@ -25,8 +25,6 @@ class LaTeXRender(Module):
 		headers = {"Content-type": "application/x-www-form-urlencoded",
 		           "Accept": "text/plain"}
 		conn = httplib.HTTPConnection("www.problemsetmarmoset.com")
-		
-		print params
 		
 		conn.request("POST", "/latex/render.php", params, headers)
 		response = conn.getresponse()
@@ -46,11 +44,11 @@ class LaTeXRender(Module):
 				transforms.append(Transform(linenum, "drop"))
 				current_block += "\n" + line
 				
-			match = blockre.search(line)
+			match = singlelinere.search(line)
 			if match:
 				transforms.append(Transform(linenum, "swap", self.render(line)))
 			else:
-				match = singlere.search(line)
+				match = startorendre.search(line)
 				if match:
 					if in_block:
 						transforms.pop() # undo last drop

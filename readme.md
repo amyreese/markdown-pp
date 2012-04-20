@@ -24,6 +24,7 @@ and process that document when viewing the repository.
 2.1\.  [Includes](#includes)  
 2.2\.  [Table of Contents](#tableofcontents)  
 2.3\.  [Reference](#reference)  
+2.4\.  [LaTeX Rendering](#latexrendering)  
 3\.  [Examples](#examples)  
 4\.  [Support](#support)  
 5\.  [References](#references)  
@@ -41,7 +42,7 @@ to the module, `markdown-pp.py`.
 Assuming you have a file named `foo.mdpp`, you can generate the preprocessed
 file `foo.md` by running the following command:
 
-    $ path/to/markdown-pp.py foo.mdpp foo.md
+    $ path/to/markdown-pp.py foo.mdpp > foo.md
 
 Because the current CLI script is very simple, it just automatically selects
 all available modules for the preprocessor to use.  I will eventually get to
@@ -102,6 +103,21 @@ inserted wherever the preprocessor finds a line beginning with `!REF`.  The
 generated reference list follows the same alternate linking method to ensure
 consistency in your document, but the link need not be referenced anywhere in
 the document to be included in the list.
+
+<a name="latexrendering"></a>
+
+### 2.4\. LaTeX Rendering
+
+Lines and blocks of lines beginning and ending with $ are rendered as LaTeX,
+using [QuickLaTeX](http://www.holoborodko.com/pavel/quicklatex/).
+
+For example,
+
+	$\displaystyle \int x^2 = \frac{x^3}{3} + C$
+
+becomes
+
+![\displaystyle \int x^2 = \frac{x^3}{3} + C](http://quicklatex.com/cache3/ql_fdd0c74719ed21c7bfec724eceb1ceea_l3.png)
 
 <a name="examples"></a>
 
