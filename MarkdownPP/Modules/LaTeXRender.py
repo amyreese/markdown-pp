@@ -7,8 +7,9 @@ import httplib, urllib
 from MarkdownPP.Module import Module
 from MarkdownPP.Transform import Transform
 
-singlelinere = re.compile("^\$(\$?)..*\$(\$?)$") # $...$ (or $$...$$)
+singlelinere = re.compile("\$(\$?)..*\$(\$?)") # $...$ (or $$...$$)
 startorendre = re.compile("^\$(\$?)|^\S.*\$(\$?)$") # $... or ...$ (or $$... or ...$$)
+codere = re.compile("^(    |\t)")
 fencedcodere = re.compile("^```\w*$")
 
 class LaTeXRender(Module):
@@ -21,6 +22,7 @@ class LaTeXRender(Module):
 		formula = formula.replace("$", "")
 		encoded_formula = formula.replace("%","[comment]").replace("+","%2B")
 		display_formula = formula.replace("\n","")
+		print 'Rendering: %s ...' % display_formula
 		
 		params = urllib.urlencode({'engine': 'quicklatex', 'input': encoded_formula})
 		headers = {"Content-type": "application/x-www-form-urlencoded",
@@ -49,15 +51,19 @@ class LaTeXRender(Module):
 					in_fenced_code_block = False
 				else:
 					in_fenced_code_block = True
-			 
-			if not in_fenced_code_block:
+			
+			is_code_block = codere.search(line)
+			if not in_fenced_code_block and not is_code_block:
 				if in_block:
 					transforms.append(Transform(linenum, "drop"))
 					current_block += "\n" + line
 					
 				match = singlelinere.search(line)
 				if match:
-					transforms.append(Transform(linenum, "swap", self.render(line)))
+					tex = match.group(0)
+					before_tex = line[0:line.find(tex)]
+					after_tex = line[(line.find(tex) + len(tex)) : len(line)]
+					transforms.append(Transform(linenum, "swap", before_tex + self.render(tex) + after_tex))
 				else:
 					match = startorendre.search(line)
 					if match:

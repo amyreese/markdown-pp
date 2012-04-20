@@ -108,13 +108,17 @@ the document to be included in the list.
 
 ### 2.4\. LaTeX Rendering
 
+Lines and blocks of lines beginning and ending with $ are rendered as LaTeX,
+using [QuickLaTeX](http://www.holoborodko.com/pavel/quicklatex/).
+
 For example,
 
 	$\displaystyle \int x^2 = \frac{x^3}{3} + C$
 
 becomes
 
-![\displaystyle \int x^2 = \frac{x^3}{3} + C](http://quicklatex.com/cache3/ql_fdd0c74719ed21c7bfec724eceb1ceea_l3.png)
+![\displaystyle \int x^2 = \frac{x^3}{3} + C](http://quicklatex.com/cache3/ql_0fa1a137ae5e89171b4ecb24ce76998f_l3.png)
+
 
 <a name="examples"></a>
 
