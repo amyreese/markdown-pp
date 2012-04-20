@@ -7,8 +7,9 @@ import httplib, urllib
 from MarkdownPP.Module import Module
 from MarkdownPP.Transform import Transform
 
-singlelinere = re.compile("^\$(\$?)..*\$(\$?)$")
-startorendre = re.compile("^\$(\$?)|^\S.*\$(\$?)$")
+singlelinere = re.compile("^\$(\$?)..*\$(\$?)$") # $...$ (or $$...$$)
+startorendre = re.compile("^\$(\$?)|^\S.*\$(\$?)$") # $... or ...$ (or $$... or ...$$)
+fencedcodere = re.compile("^```\w*$")
 
 class LaTeXRender(Module):
 	"""
@@ -38,25 +39,35 @@ class LaTeXRender(Module):
 		linenum = 0
 		in_block = False
 		current_block = ""
+		in_fenced_code_block = False
 		
 		for line in data:
-			if in_block:
-				transforms.append(Transform(linenum, "drop"))
-				current_block += "\n" + line
-				
-			match = singlelinere.search(line)
+			# Fenced code blocks (Github-flavored markdown)
+			match = fencedcodere.search(line)
 			if match:
-				transforms.append(Transform(linenum, "swap", self.render(line)))
-			else:
-				match = startorendre.search(line)
+				if in_fenced_code_block:
+					in_fenced_code_block = False
+				else:
+					in_fenced_code_block = True
+			 
+			if not in_fenced_code_block:
+				if in_block:
+					transforms.append(Transform(linenum, "drop"))
+					current_block += "\n" + line
+					
+				match = singlelinere.search(line)
 				if match:
-					if in_block:
-						transforms.pop() # undo last drop
-						transforms.append(Transform(linenum, "swap", self.render(current_block)))
-					else:
-						current_block = line
-						transforms.append(Transform(linenum, "drop"))
-					in_block = not in_block
+					transforms.append(Transform(linenum, "swap", self.render(line)))
+				else:
+					match = startorendre.search(line)
+					if match:
+						if in_block:
+							transforms.pop() # undo last drop
+							transforms.append(Transform(linenum, "swap", self.render(current_block)))
+						else:
+							current_block = line
+							transforms.append(Transform(linenum, "drop"))
+						in_block = not in_block
 					
 			linenum += 1
 

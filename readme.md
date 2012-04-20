@@ -108,9 +108,6 @@ the document to be included in the list.
 
 ### 2.4\. LaTeX Rendering
 
-Lines and blocks of lines beginning and ending with $ are rendered as LaTeX,
-using [QuickLaTeX](http://www.holoborodko.com/pavel/quicklatex/).
-
 For example,
 
 	$\displaystyle \int x^2 = \frac{x^3}{3} + C$
