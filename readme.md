@@ -42,7 +42,7 @@ to the module, `markdown-pp.py`.
 Assuming you have a file named `foo.mdpp`, you can generate the preprocessed
 file `foo.md` by running the following command:
 
-    $ path/to/markdown-pp.py foo.mdpp > foo.md
+    $ path/to/markdown-pp.py foo.mdpp foo.md
 
 Because the current CLI script is very simple, it just automatically selects
 all available modules for the preprocessor to use.  I will eventually get to
