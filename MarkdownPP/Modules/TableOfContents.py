@@ -101,7 +101,7 @@ class TableOfContents(Module):
 
 			(depth, title) = headers[linenum]
 			depth += depthoffset
-			short = re.sub("([\s,-]+)", "", title).lower()
+			short = re.sub("([\s,-,\(,\)]+)", "", title).lower()
 
 			while depth > lastdepth:
 				stack.append(headernum)
