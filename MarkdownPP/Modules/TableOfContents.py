@@ -10,6 +10,7 @@ tocre = re.compile("^!TOC(\s+[1-6])?\s*$")
 atxre = re.compile("^(#+)\s*(.+)$")
 setextre = re.compile("^(=+|-+)\s*$")
 fencedcodere = re.compile("^```\w*$")
+linkre = re.compile("(\[(.*?)\]\(.*?\))")
 
 class TableOfContents(Module):
 	"""
@@ -17,6 +18,12 @@ class TableOfContents(Module):
 	headers in the document.  The table of contents is inserted in the document
 	wherever a `!TOC` marker is found at the beginning of a line.
 	"""
+
+	@staticmethod
+	def clean_title(title):
+		for link in re.findall(linkre,title):
+			title = title.replace(link[0],link[1])
+		return title
 
 	def transform(self, data):
 		transforms = []
@@ -93,6 +100,8 @@ class TableOfContents(Module):
 		keys = headers.keys()
 		keys.sort()
 
+		short_titles = []
+
 		# interate through the list of headers, generating the nested table
 		# of contents data, and creating the appropriate transforms
 		for linenum in keys:
@@ -101,8 +110,17 @@ class TableOfContents(Module):
 
 			(depth, title) = headers[linenum]
 			depth += depthoffset
-			short = re.sub("([\s,-,\(,\)]+)", "", title).lower()
-
+			short = re.sub("([\s,-,\(,\)]+)", "", TableOfContents.clean_title(title)).lower()
+			
+			if short in short_titles:
+				i = 1
+				short_i = short
+				while short_i in short_titles:
+					short_i = short + "-" + str(i)
+					i += 1
+				short = short_i
+			short_titles.append(short)
+				
 			while depth > lastdepth:
 				stack.append(headernum)
 				headernum = 0
@@ -122,8 +140,7 @@ class TableOfContents(Module):
 			else:
 				section = ".".join([str(x) for x in stack]) + ".%d\\. " % headernum
 
-			tocdata += "%s [%s](#%s)  \n" % (section, title, short)
-
+			tocdata += "%s [%s](#%s)  \n" % (section, TableOfContents.clean_title(title), short)
 			transforms.append(Transform(linenum, "swap", re.sub(title, section + title, data[linenum])))
 			transforms.append(Transform(linenum, "prepend", "<a name=\"%s\"></a>\n\n" % short))
 
