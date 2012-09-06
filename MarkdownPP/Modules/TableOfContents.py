@@ -1,7 +1,7 @@
 # Copyright (C) 2010 John Reese
 # Licensed under the MIT license
 
-import re
+import re, sys
 
 from MarkdownPP.Module import Module
 from MarkdownPP.Transform import Transform
@@ -10,7 +10,7 @@ tocre = re.compile("^!TOC(\s+[1-6])?\s*$")
 atxre = re.compile("^(#+)\s*(.+)$")
 setextre = re.compile("^(=+|-+)\s*$")
 fencedcodere = re.compile("^```\w*$")
-linkre = re.compile("(\[(.*?)\]\(.*?\))")
+linkre = re.compile("(\[(.*?)\][\(\[].*?[\)\]])")
 
 class TableOfContents(Module):
 	"""
@@ -26,6 +26,7 @@ class TableOfContents(Module):
 		return title
 
 	def transform(self, data):
+		print data
 		transforms = []
 
 		lowestdepth = 10
@@ -141,7 +142,7 @@ class TableOfContents(Module):
 				section = ".".join([str(x) for x in stack]) + ".%d\\. " % headernum
 
 			tocdata += "%s [%s](#%s)  \n" % (section, TableOfContents.clean_title(title), short)
-			transforms.append(Transform(linenum, "swap", re.sub(title, section + title, data[linenum])))
+			transforms.append(Transform(linenum, "swap", data[linenum].replace(title, section + title)))
 			transforms.append(Transform(linenum, "prepend", "<a name=\"%s\"></a>\n\n" % short))
 
 		# create transforms for the !TOC markers
