@@ -25,9 +25,14 @@ Installation and Usage
 ----------------------
 
 Currently, you'll need to download the source code from [GitHub][2] or clone
-the repository.  There are two components to the project: a Python module,
-`MarkdownPP`, and a Python script that acts as a simple command line interface
-to the module, `markdown-pp.py`.
+the repository, and the run the installation script manually.
+
+    sudo python setup.py install
+
+
+There are two components to the project: a Python module, `MarkdownPP`, and a
+Python script that acts as a simple command line interface to the module,
+`markdown-pp.py`.
 
 Assuming you have a file named `foo.mdpp`, you can generate the preprocessed
 file `foo.md` by running the following command:
