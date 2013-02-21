@@ -111,7 +111,7 @@ class TableOfContents(Module):
 			(depth, title) = headers[linenum]
 			depth += depthoffset
 			short = re.sub("([\s,-,\(,\)]+)", "", TableOfContents.clean_title(title)).lower()
-			
+
 			if short in short_titles:
 				i = 1
 				short_i = short
@@ -120,7 +120,7 @@ class TableOfContents(Module):
 					i += 1
 				short = short_i
 			short_titles.append(short)
-				
+
 			while depth > lastdepth:
 				stack.append(headernum)
 				headernum = 0
@@ -141,7 +141,7 @@ class TableOfContents(Module):
 				section = ".".join([str(x) for x in stack]) + ".%d\\. " % headernum
 
 			tocdata += "%s [%s](#%s)  \n" % (section, TableOfContents.clean_title(title), short)
-			
+
 			transforms.append(Transform(linenum, "swap", data[linenum].replace(title, section + title)))
 			transforms.append(Transform(linenum, "prepend", "<a name=\"%s\"></a>\n\n" % short))
 
