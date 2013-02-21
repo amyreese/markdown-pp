@@ -3,11 +3,12 @@
 
 import re
 import httplib, urllib
+import os
 
 from MarkdownPP.Module import Module
 from MarkdownPP.Transform import Transform
 
-youtube_url_re = re.compile("<iframe.*http://www\.youtube\.com/embed/([a-zA-Z0-9\-]*)['\"].*</iframe>")
+youtube_url_re = re.compile('^!VIDEO\s+"http://www\.youtube\.com/embed/([a-zA-Z0-9\-]*)"')
 glowfoto_server_re = re.compile("<uploadform>(.*)</uploadform>")
 glowfoto_image_re = re.compile("<thumburl>(.*)</thumburl>")
 codere = re.compile("^(    |\t)")
@@ -41,42 +42,38 @@ class YoutubeEmbed(Module):
 					url = match.group(1)
 					image_url = 'http://img.youtube.com/vi/%s/0.jpg' % url
 					video_url = 'http://www.youtube.com/watch?v=%s' % url
+					procesed_image_dir = os.path.join('images', 'youtube')
+					processed_image_path = os.path.join(procesed_image_dir, '%s.png' % url)
 
-					# try to add a play button to the screenshot
-					try:
-						import tempfile
-						import Image
-						import requests
+					# do we already have a screenshot?
+					if not os.path.isfile(processed_image_path):
+						# try to add a play button to the screenshot
+						try:
+							import tempfile
+							import Image
 
-						# create temporary files for image operations
-						screenshot_img = tempfile.NamedTemporaryFile(suffix=".jpg")
-						button_img = tempfile.NamedTemporaryFile(suffix=".png")
-						final_img = tempfile.NamedTemporaryFile(suffix=".png")
+							# create directories if needed
+							if not os.path.exists(procesed_image_dir):
+								os.makedirs(procesed_image_dir)
 
-						# grab screenshot and button image
-						urllib.urlretrieve(image_url, screenshot_img.name)
-						urllib.urlretrieve(play_button_url, button_img.name)
+							# create temporary files for image operations
+							screenshot_img = tempfile.NamedTemporaryFile(suffix=".jpg")
+							button_img = tempfile.NamedTemporaryFile(suffix=".png")
 
-						# layer the images using PIL
-						background = Image.open(screenshot_img.name)
-						foreground = Image.open(button_img.name)
-						background.paste(foreground, (90, 65), foreground)
-						background.save(final_img.name)
+							# grab screenshot and button image
+							urllib.urlretrieve(image_url, screenshot_img.name)
+							urllib.urlretrieve(play_button_url, button_img.name)
 
-						# upload resulting image to glowfoto (no api key required)
-						r = requests.get('http://www.glowfoto.com/getserverxml.php')
-						match = glowfoto_server_re.search(r.text)
-						if match:
-							post_url = match.group(1)
-							r = requests.post(post_url, files={'image': open(final_img.name, 'rb')})
-							match = glowfoto_image_re.search(r.text)
-							if match:
-								image_url = match.group(1).replace('T.png', 'L.png').encode('ascii','ignore')
-					except Exception, e:
-						print 'Unable to add play button to YouTube screenshot (%s). Using the screenshot on its own instead.' % e
-						pass
+							# layer the images using PIL and save
+							background = Image.open(screenshot_img.name)
+							foreground = Image.open(button_img.name)
+							background.paste(foreground, (90, 65), foreground)
+							background.save(processed_image_path)
+						except Exception, e:
+							print 'Unable to add play button to YouTube screenshot (%s). Using the screenshot on its own instead.' % e
+							pass
 
-					image_link = '[![Link to Youtube video](%s)](%s)\n' % (image_url, video_url)
+					image_link = '[![Link to Youtube video](%s)](%s)\n' % (processed_image_path, video_url)
 					transforms.append(Transform(linenum, "swap", image_link))
 
 			linenum += 1

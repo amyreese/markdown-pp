@@ -25,7 +25,7 @@ and process that document when viewing the repository.
 2.2\.  [Table of Contents](#tableofcontents)  
 2.3\.  [Reference](#reference)  
 2.4\.  [LaTeX Rendering](#latexrendering)  
-2.5\.  [YouTube Embed Conversion](#youtubeembedconversion)  
+2.5\.  [YouTube Embeds](#youtubeembeds)  
 3\.  [Examples](#examples)  
 4\.  [Support](#support)  
 5\.  [References](#references)  
@@ -126,20 +126,21 @@ becomes
 ![\displaystyle \int x^2 = \frac{x^3}{3} + C](http://quicklatex.com/cache3/ql_0fa1a137ae5e89171b4ecb24ce76998f_l3.png "\displaystyle \int x^2 = \frac{x^3}{3} + C")
 
 
-<a name="youtubeembedconversion"></a>
+<a name="youtubeembeds"></a>
 
-### 2.5\. YouTube Embed Conversion
+### 2.5\. YouTube Embeds
 
-As GitHub-flavored Markdown does not allow embed tags, each Youtube embed is
-converted into a screenshot that links to the video itself.
+As GitHub-flavored Markdown does not allow embed tags, each line of the form
+`!VIDEO "[youtube url]"` is converted into a screenshot that links to the video,
+roughly simulating the look of an embedded video player.
 
 For example,
 
-    <iframe width="853" height="480" src="http://www.youtube.com/embed/7aEYoP5-duY" frameborder="0" allowfullscreen></iframe>
+    !VIDEO "http://www.youtube.com/embed/7aEYoP5-duY"
 
 becomes
 
-[![Link to Youtube video](http://img4.glowfoto.com/images/2013/02/21-0820532358L.png)](http://www.youtube.com/watch?v=7aEYoP5-duY)
+[![Link to Youtube video](images/youtube/7aEYoP5-duY.png)](http://www.youtube.com/watch?v=7aEYoP5-duY)
 
 <a name="examples"></a>
 

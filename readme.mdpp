@@ -104,18 +104,19 @@ becomes
 
 $\displaystyle \int x^2 = \frac{x^3}{3} + C$
 
-### YouTube Embed Conversion
+### YouTube Embeds
 
-As GitHub-flavored Markdown does not allow embed tags, each Youtube embed is
-converted into a screenshot that links to the video itself.
+As GitHub-flavored Markdown does not allow embed tags, each line of the form
+`!VIDEO "[youtube url]"` is converted into a screenshot that links to the video,
+roughly simulating the look of an embedded video player.
 
 For example,
 
-    <iframe width="853" height="480" src="http://www.youtube.com/embed/7aEYoP5-duY" frameborder="0" allowfullscreen></iframe>
+    !VIDEO "http://www.youtube.com/embed/7aEYoP5-duY"
 
 becomes
 
-<iframe width="853" height="480" src="http://www.youtube.com/embed/7aEYoP5-duY" frameborder="0" allowfullscreen></iframe>
+!VIDEO "http://www.youtube.com/embed/7aEYoP5-duY"
 
 Examples
 --------
