@@ -104,6 +104,20 @@ becomes
 
 $\displaystyle \int x^2 = \frac{x^3}{3} + C$
 
+### YouTube Embeds
+
+As GitHub-flavored Markdown does not allow embed tags, each line of the form
+`!VIDEO "[youtube url]"` is converted into a screenshot that links to the video,
+roughly simulating the look of an embedded video player.
+
+For example,
+
+    !VIDEO "http://www.youtube.com/embed/7aEYoP5-duY"
+
+becomes
+
+!VIDEO "http://www.youtube.com/embed/7aEYoP5-duY"
+
 Examples
 --------
 
@@ -155,4 +169,3 @@ References
 
 [1]: http://leetcode.net/mantis "LeetCode.net Bugtracker"
 [2]: http://github.com/jreese/markdown-pp "Markdown Preprocessor on GitHub"
-
