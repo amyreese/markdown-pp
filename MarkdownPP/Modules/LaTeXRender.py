@@ -10,7 +10,10 @@ from MarkdownPP.Transform import Transform
 singlelinere = re.compile("\$(\$?)..*\$(\$?)") # $...$ (or $$...$$)
 startorendre = re.compile("^\$(\$?)|^\S.*\$(\$?)$") # $... or ...$ (or $$... or ...$$)
 codere = re.compile("^(    |\t)")
-fencedcodere = re.compile("^```\w*$")
+spancodere = re.compile(r'(`[^`]+\`)') # code between backticks
+
+# Support for Pandoc style code blocks with attributes
+fencedcodere = re.compile("^((> *)?```\w*|(> *)?~~~~*(\s*{.*})?)$")
 
 class LaTeXRender(Module):
 	"""
@@ -42,11 +45,17 @@ class LaTeXRender(Module):
 					
 				match = singlelinere.search(line)
 				if match:
-					# Single LaTeX line
-					tex = match.group(0)
-					before_tex = line[0:line.find(tex)]
-					after_tex = line[(line.find(tex) + len(tex)) : len(line)]
-					transforms.append(Transform(linenum, "swap", before_tex + self.render(tex) + after_tex))
+					code_pos = []
+					for m in spancodere.finditer(line):
+						code_pos += range(*m.span())
+
+					if not (match.start(0) in code_pos or match.end(0) in code_pos):
+						
+						# Single LaTeX line
+						tex = match.group(0)
+						before_tex = line[0:line.find(tex)]
+						after_tex = line[(line.find(tex) + len(tex)) : len(line)]
+						transforms.append(Transform(linenum, "swap", before_tex + self.render(tex) + after_tex))
 				else:
 					match = startorendre.search(line)
 					if match:
