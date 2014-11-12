@@ -5,19 +5,36 @@
 
 import sys
 import MarkdownPP
+import argparse
 
-if len(sys.argv) > 2:
-	mdpp = open(sys.argv[1], "r")
-	md = open(sys.argv[2], "w")
+description = "Preprocessor for Markdown files." \
 
-elif len(sys.argv) > 1:
-	mdpp = open(sys.argv[1], "r")
+parser = argparse.ArgumentParser(description=description)
+parser.add_argument('FILENAME', help='Input file name')
+parser.add_argument("-o", "--output", help="Output file name." \
+    + " If no output file is specified, writes output to stdout.")
+parser.add_argument('-e', '--exclude',\
+ help='List of modules to exclude, separated by commas. ' \
+ +'Available modules: ' + ", ".join(MarkdownPP.modules.keys()))
+args = parser.parse_args()
+
+
+mdpp = open(args.FILENAME, "r")
+if args.output:
+	md = open(args.output, "w")
+else:
 	md = sys.stdout
 
-else:
-	sys.exit(1)
-	
-MarkdownPP.MarkdownPP(input=mdpp, output=md, modules=MarkdownPP.modules.keys())
+modules = MarkdownPP.modules.keys();
+
+if args.exclude:
+	for module in args.exclude.split(','):
+		if module in modules:
+			modules.remove(module)
+		else:
+			print "Cannot exclude ", module, " - no such module"
+ 
+MarkdownPP.MarkdownPP(input=mdpp, output=md, modules=modules)
 
 mdpp.close()
 md.close()
