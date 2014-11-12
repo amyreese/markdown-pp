@@ -48,14 +48,20 @@ Python script that acts as a simple command line interface to the module,
 Assuming you have a file named `foo.mdpp`, you can generate the preprocessed
 file `foo.md` by running the following command:
 
-    $ path/to/markdown-pp.py foo.mdpp foo.md
+    $ path/to/markdown-pp.py foo.mdpp -o foo.md
 
-Because the current CLI script is very simple, it just automatically selects
-all available modules for the preprocessor to use.  I will eventually get to
-the point of adding command parameters and switches to select modules.  In the
-mean time, if you only want to use a subset of modules, you can either modify
-`markdown-pp.py` directly, or duplicate its usage of the core module with your
-own list of preferred modules.
+If you do not specify an output file name, the results will be printed to 
+stdout, enabling them to be piped to another command.
+
+By default, all available modules are enabled. You can specify a list of
+modules to exclude:
+
+    $ path/to/markdown-pp.py foo.mdpp -o foo.md -e latexrender,youtubembed
+
+To see usage instructions, including a list of enabled modules, supply the
+-h or --help arguments:
+
+    $ path/to/markdown-pp.py --help
 
 <a name="modules"></a>
 
