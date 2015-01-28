@@ -23,7 +23,4 @@ setup(name = "MarkdownPP",
       license='MIT License',
       scripts = ['markdown-pp.py'],
       packages = ['MarkdownPP', 'MarkdownPP/Modules'],
-      install_requires=[
-          'argparse',
-      ],
       )
