@@ -35,7 +35,7 @@ and process that document when viewing the repository.
 1\. Installation and Usage
 ----------------------
 
-Currently, you'll need to download the source code from [GitHub][2] or clone
+Currently, you'll need to download the source code from [GitHub][] or clone
 the repository, and the run the installation script manually.
 
     sudo python setup.py install
@@ -43,25 +43,25 @@ the repository, and the run the installation script manually.
 
 There are two components to the project: a Python module, `MarkdownPP`, and a
 Python script that acts as a simple command line interface to the module,
-`markdown-pp.py`.
+`markdown-pp`.
 
 Assuming you have a file named `foo.mdpp`, you can generate the preprocessed
 file `foo.md` by running the following command:
 
-    $ path/to/markdown-pp.py foo.mdpp -o foo.md
+    $ markdown-pp foo.mdpp -o foo.md
 
-If you do not specify an output file name, the results will be printed to 
+If you do not specify an output file name, the results will be printed to
 stdout, enabling them to be piped to another command.
 
 By default, all available modules are enabled. You can specify a list of
 modules to exclude:
 
-    $ path/to/markdown-pp.py foo.mdpp -o foo.md -e latexrender,youtubembed
+    $ markdown-pp foo.mdpp -o foo.md -e latexrender,youtubembed
 
 To see usage instructions, including a list of enabled modules, supply the
 -h or --help arguments:
 
-    $ path/to/markdown-pp.py --help
+    $ markdown-pp --help
 
 <a name="modules"></a>
 
@@ -192,7 +192,7 @@ The preprocessor would generate the following Markdown-ready document file.md:
 -------
 
 If you find any problems with MarkdownPP, or have any feature requests, please
-report them to [my bugtracker][1], and I will respond when possible.  Code
+report them to [GitHub][], and I will respond when possible.  Code
 contributions are *always* welcome, and ideas for new modules, or additions to
 existing modules, are also appreciated.
 
@@ -201,8 +201,6 @@ existing modules, are also appreciated.
 5\. References
 ----------
 
-*	[LeetCode.net Bugtracker][1]
-*	[Markdown Preprocessor on GitHub][2]
+*	[Markdown Preprocessor on GitHub][github]
 
-[1]: http://leetcode.net/mantis "LeetCode.net Bugtracker"
-[2]: http://github.com/jreese/markdown-pp "Markdown Preprocessor on GitHub"
+[github]: http://github.com/jreese/markdown-pp "Markdown Preprocessor on GitHub"
