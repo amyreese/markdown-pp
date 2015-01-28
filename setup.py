@@ -9,12 +9,12 @@ import shutil
 if path.isfile('README.md'):
     shutil.copyfile('README.md', 'README')
 
-setup(name = "MarkdownPP",
-      description = "Markdown preprocessor",
-      version = "1.0",
-      author = "John Reese",
-      author_email = "john@noswap.com",
-      url = "https://github.com/jreese/markdown-pp",
+setup(name="MarkdownPP",
+      description="Markdown preprocessor",
+      version="1.0",
+      author="John Reese",
+      author_email="john@noswap.com",
+      url="https://github.com/jreese/markdown-pp",
       classifiers=['License :: OSI Approved :: MIT License',
                    'Operating System :: OS Independent',
                    'Programming Language :: Python',
@@ -26,6 +26,6 @@ setup(name = "MarkdownPP",
                    'Development Status :: 4 - Beta',
                    ],
       license='MIT License',
-      scripts = ['bin/markdown-pp'],
-      packages = ['MarkdownPP', 'MarkdownPP/Modules'],
+      scripts=['bin/markdown-pp'],
+      packages=['MarkdownPP', 'MarkdownPP/Modules'],
       )

@@ -13,5 +13,10 @@ upload: readme.md
 lint:
 	flake8 --show-source .
 
+test: lint
+	python2 bin/markdown-pp readme.mdpp -o readme.test && diff -u readme.md readme.test
+	python3 bin/markdown-pp readme.mdpp -o readme.test && diff -u readme.md readme.test
+	rm -f readme.test
+
 clean:
 	rm -rf build dist README MANIFEST MarkdownPP.egg-info
