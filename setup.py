@@ -21,6 +21,6 @@ setup(name = "MarkdownPP",
                    'Development Status :: 4 - Beta',
                    ],
       license='MIT License',
-      scripts = ['markdown-pp.py'],
+      scripts = ['bin/markdown-pp'],
       packages = ['MarkdownPP', 'MarkdownPP/Modules'],
       )
