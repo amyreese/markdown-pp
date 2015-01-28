@@ -5,8 +5,11 @@ python:
     - "3.2"
     - "3.3"
     - "pypy"
+install:
+    - "pip install flake8"
 script:
     - "pip install ."
+    - "make test"
 matrix:
     allow_failures:
         - python: "2.6"
