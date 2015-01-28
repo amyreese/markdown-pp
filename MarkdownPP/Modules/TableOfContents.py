@@ -1,4 +1,4 @@
-# Copyright (C) 2010 John Reese
+# Copyright 2015 John Reese
 # Licensed under the MIT license
 
 import re
