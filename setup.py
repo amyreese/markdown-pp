@@ -1,8 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
 from setuptools import setup
+
+from os import path
+import shutil
+
+if path.isfile('README.md'):
+    shutil.copyfile('README.md', 'README')
 
 setup(name = "MarkdownPP",
       description = "Markdown preprocessor",
