@@ -10,5 +10,8 @@ dev:
 upload: readme.md
 	python setup.py sdist upload
 
+lint:
+	flake8 --show-source .
+
 clean:
 	rm -rf build dist README MANIFEST MarkdownPP.egg-info
