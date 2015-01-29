@@ -49,8 +49,8 @@ class YoutubeEmbed(Module):
                     url = match.group(1)
                     image_url = 'http://img.youtube.com/vi/%s/0.jpg' % url
                     video_url = 'http://www.youtube.com/watch?v=%s' % url
-                    procesed_image_dir = os.path.join('images', 'youtube')
-                    processed_image_path = os.path.join(procesed_image_dir,
+                    processed_image_dir = os.path.join('images', 'youtube')
+                    processed_image_path = os.path.join(processed_image_dir,
                                                         '%s.png' % url)
 
                     # do we already have a screenshot?
@@ -61,8 +61,8 @@ class YoutubeEmbed(Module):
                             from tempfile import NamedTemporaryFile
 
                             # create directories if needed
-                            if not os.path.exists(procesed_image_dir):
-                                os.makedirs(procesed_image_dir)
+                            if not os.path.exists(processed_image_dir):
+                                os.makedirs(processed_image_dir)
 
                             # create temporary files for image operations
                             screenshot_img = NamedTemporaryFile(suffix=".jpg")
