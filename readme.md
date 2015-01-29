@@ -19,6 +19,8 @@ As an example, this document in raw format is named "readme.mdpp", and the
 generated document from MarkdownPP is named "readme.md" so that GitHub can find
 and process that document when viewing the repository.
 
+[![Build Status](https://travis-ci.org/jreese/markdown-pp.svg?branch=master)](https://travis-ci.org/jreese/markdown-pp)
+
 1\.  [Installation and Usage](#installationandusage)  
 2\.  [Modules](#modules)  
 2.1\.  [Includes](#includes)  
@@ -35,11 +37,10 @@ and process that document when viewing the repository.
 1\. Installation and Usage
 ----------------------
 
-Currently, you'll need to download the source code from [GitHub][] or clone
+Currently, you'll need to download the source code from [GitHub][repo] or clone
 the repository, and the run the installation script manually.
 
-    sudo python setup.py install
-
+    pip install MarkdownPP
 
 There are two components to the project: a Python module, `MarkdownPP`, and a
 Python script that acts as a simple command line interface to the module,
@@ -62,6 +63,7 @@ To see usage instructions, including a list of enabled modules, supply the
 -h or --help arguments:
 
     $ markdown-pp --help
+
 
 <a name="modules"></a>
 
@@ -148,6 +150,7 @@ becomes
 
 [![Link to Youtube video](images/youtube/7aEYoP5-duY.png)](http://www.youtube.com/watch?v=7aEYoP5-duY)
 
+
 <a name="examples"></a>
 
 3\. Examples
@@ -186,21 +189,23 @@ The preprocessor would generate the following Markdown-ready document file.md:
 
 	[github]: http://github.com "GitHub"
 
+
 <a name="support"></a>
 
 4\. Support
 -------
 
 If you find any problems with MarkdownPP, or have any feature requests, please
-report them to [GitHub][], and I will respond when possible.  Code
+report them to [GitHub][repo], and I will respond when possible.  Code
 contributions are *always* welcome, and ideas for new modules, or additions to
 existing modules, are also appreciated.
+
 
 <a name="references"></a>
 
 5\. References
 ----------
 
-*	[Markdown Preprocessor on GitHub][github]
+*	[Markdown Preprocessor on GitHub][repo]
 
-[github]: http://github.com/jreese/markdown-pp "Markdown Preprocessor on GitHub"
+[repo]: http://github.com/jreese/markdown-pp "Markdown Preprocessor on GitHub"
