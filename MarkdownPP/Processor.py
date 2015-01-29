@@ -5,6 +5,11 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import sys
+
+if sys.version_info[0] != 2:
+    basestring = str
+
 
 class Processor:
     """
@@ -47,7 +52,7 @@ class Processor:
             for transform in transforms:
                 linenum = transform.linenum
 
-                if isinstance(transform.data, str):
+                if isinstance(transform.data, basestring):
                     transform.data = [transform.data]
 
                 if transform.oper == "prepend":
