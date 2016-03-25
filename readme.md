@@ -131,7 +131,7 @@ For example,
 
 becomes
 
-![\displaystyle \int x^2 = \frac{x^3}{3} + C](http://quicklatex.com/cache3/ql_0fa1a137ae5e89171b4ecb24ce76998f_l3.png "\displaystyle \int x^2 = \frac{x^3}{3} + C")
+![\displaystyle \int x^2 = \frac{x^3}{3} + C](http://quicklatex.com/cache3/ea/ql_0f9331171ded7fa9ef38e57fccf74aea_l3.png "\displaystyle \int x^2 = \frac{x^3}{3} + C")
 
 
 <a name="youtubeembeds"></a>
