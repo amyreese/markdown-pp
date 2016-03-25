@@ -30,4 +30,7 @@ setup(name="MarkdownPP",
       license='MIT License',
       scripts=['bin/markdown-pp'],
       packages=['MarkdownPP', 'MarkdownPP/Modules'],
+      install_requires=[
+            "Watchdog >= 0.8.3",
+      ],
       )
