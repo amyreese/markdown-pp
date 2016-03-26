@@ -1,5 +1,5 @@
 readme.md: readme.mdpp
-	python bin/markdown-pp readme.mdpp -o readme.md
+	python bin/markdown_pp.py readme.mdpp -o readme.md
 
 build: readme.md
 	python setup.py build
@@ -14,7 +14,7 @@ lint:
 	flake8 --show-source .
 
 test: lint
-	python bin/markdown-pp readme.mdpp -o readme.test && diff -u readme.md readme.test
+	python bin/markdown_pp.py readme.mdpp -o readme.test && diff -u readme.md readme.test
 	rm -f readme.test
 
 clean:
