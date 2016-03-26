@@ -49,7 +49,6 @@ class MarkdownPPFileEventHandler(PatternMatchingEventHandler):
     def on_created(self, event):
         self.process(event)
 
-
 def main():
     description = "Preprocessor for Markdown files."
 
@@ -109,6 +108,7 @@ def main():
 
         mdpp.close()
         md.close()
+
 
 if __name__ == "__main__":
     main()
