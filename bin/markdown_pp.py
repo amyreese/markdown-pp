@@ -16,12 +16,14 @@ import time
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 
+
 # Terminal output ANSI color codes
 class colors:
-    BLUE   = '\033[36;49;22m'
-    MAGB   = '\033[35;49;1m'
-    GREEN  = '\033[32;49;22m'
+    BLUE = '\033[36;49;22m'
+    MAGB = '\033[35;49;1m'
+    GREEN = '\033[32;49;22m'
     NORMAL = '\033[0m'
+
 
 # Custom event handler for watchdog observer
 class MarkdownPPFileEventHandler(PatternMatchingEventHandler):
@@ -38,10 +40,10 @@ class MarkdownPPFileEventHandler(PatternMatchingEventHandler):
 
         # Logs time and file changed (with colors!)
         print(time.strftime("%c") + ":",
-            colors.MAGB + event.src_path, 
-            colors.GREEN + event.event_type,
-            "and processed with MarkdownPP",
-            colors.NORMAL)
+              colors.MAGB + event.src_path,
+              colors.GREEN + event.event_type,
+              "and processed with MarkdownPP",
+              colors.NORMAL)
 
     def on_modified(self, event):
         self.process(event)
@@ -49,22 +51,25 @@ class MarkdownPPFileEventHandler(PatternMatchingEventHandler):
     def on_created(self, event):
         self.process(event)
 
+
 def main():
     description = "Preprocessor for Markdown files."
 
     parser = argparse.ArgumentParser(description=description)
 
     # Argument for watching directory and subdirectory to process .mdpp files
-    parser.add_argument('-w', '--watch', action='store_true', help='Watch current '
-                        'directory and subdirectories for changing .mdpp files and '
-                        'process in local directory. File output name is same as '
-                        'file input name.')
-    parser.add_argument('FILENAME', help='Input file name (or directory if watching)')
+    parser.add_argument('-w', '--watch', action='store_true', help='Watch '
+                        'current directory and subdirectories for changing '
+                        '.mdpp files and process in local directory. File '
+                        'output name is same as file input name.')
+    parser.add_argument('FILENAME', help='Input file name (or directory '
+                        'if watching)')
     parser.add_argument('-o', '--output', help='Output file name. '
-                        'If no output file is specified, writes output to stdout.')
+                        'If no output file is specified, writes output '
+                        'to stdout.')
     parser.add_argument('-e', '--exclude',
-                        help='List of modules to exclude, separated by commas. '
-                        'Available modules: ' +
+                        help='List of modules to exclude, separated by '
+                        'commas. Available modules: ' +
                         ', '.join(MarkdownPP.modules.keys()))
     args = parser.parse_args()
 

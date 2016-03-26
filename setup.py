@@ -30,7 +30,7 @@ setup(name="MarkdownPP",
       license='MIT License',
       # scripts=['bin/markdown-pp'],
       packages=['MarkdownPP', 'MarkdownPP/Modules'],
-      entry_points = {
+      entry_points={
             'console_scripts': [
                   'markdown-pp = bin.markdown_pp:main'
             ],
