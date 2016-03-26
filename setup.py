@@ -28,8 +28,13 @@ setup(name="MarkdownPP",
                    'Development Status :: 4 - Beta',
                    ],
       license='MIT License',
-      scripts=['bin/markdown-pp'],
+      # scripts=['bin/markdown-pp'],
       packages=['MarkdownPP', 'MarkdownPP/Modules'],
+      entry_points = {
+            'console_scripts': [
+                  'markdown-pp = bin.markdown_pp:main'
+            ],
+      },
       install_requires=[
             "Watchdog >= 0.8.3",
       ],
