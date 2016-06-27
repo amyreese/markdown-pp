@@ -24,10 +24,11 @@ and process that document when viewing the repository.
 1\.  [Installation and Usage](#installationandusage)  
 2\.  [Modules](#modules)  
 2.1\.  [Includes](#includes)  
-2.2\.  [Table of Contents](#tableofcontents)  
-2.3\.  [Reference](#reference)  
-2.4\.  [LaTeX Rendering](#latexrendering)  
-2.5\.  [YouTube Embeds](#youtubeembeds)  
+2.2\.  [IncludeURLs](#includeurls)  
+2.3\.  [Table of Contents](#tableofcontents)  
+2.4\.  [Reference](#reference)  
+2.5\.  [LaTeX Rendering](#latexrendering)  
+2.6\.  [YouTube Embeds](#youtubeembeds)  
 3\.  [Examples](#examples)  
 4\.  [Support](#support)  
 5\.  [References](#references)  
@@ -96,9 +97,41 @@ Compiling `index.mdpp` with the Include module will produce the following:
 	Hello
 	World!
 
+<a name="includeurls"></a>
+
+### 2.2\. IncludeURLs
+
+Facilitates the inclusion of remote files, such as files kept in a subversion
+or GitHub repository. Like Include, the IncludeURL module can replace a line of
+the form `!INCLUDEURL "http://your.domain/path/to/filename"` with the contents
+returned from that url, recursively including additional remote urls as needed.
+
+IncludeURL runs immediately after the Include module finishes executing. This
+means that is it possible to include local files that then require remote files,
+but impossible parse !INCLUDE statements found in remote files. This is prevent
+ambiguity as to where the file would be located.
+
+Remote file `http://your.domain/foo.mdpp`:
+
+    Hello
+
+Remote file `http://your.domain/bar.mdpp`:
+
+    Remote World!
+
+Local file `index.mdpp`:
+
+    !INCLUDEURL "http://your.domain/foo.mdpp"
+    !INCLUDEURL "http://your.domain/bar.mdpp"
+
+Compiling `index.mdpp` with the IncludeURL module will produce the following:
+
+    Hello
+    Remote World!
+
 <a name="tableofcontents"></a>
 
-### 2.2\. Table of Contents
+### 2.3\. Table of Contents
 
 The biggest feature provided by MarkdownPP is the generation of a table of
 contents for a document, with each item linked to the appropriate section of the
@@ -109,7 +142,7 @@ heading tag that Markdown would generate.
 
 <a name="reference"></a>
 
-### 2.3\. Reference
+### 2.4\. Reference
 
 Similarly, MarkdownPP can generate a list of references that follow Markdown's
 alternate link syntax, eg `[name]: <url> "Title"`.  A list of links will be
@@ -120,7 +153,7 @@ the document to be included in the list.
 
 <a name="latexrendering"></a>
 
-### 2.4\. LaTeX Rendering
+### 2.5\. LaTeX Rendering
 
 Lines and blocks of lines beginning and ending with $ are rendered as LaTeX,
 using [QuickLaTeX](http://www.holoborodko.com/pavel/quicklatex/).
@@ -136,7 +169,7 @@ becomes
 
 <a name="youtubeembeds"></a>
 
-### 2.5\. YouTube Embeds
+### 2.6\. YouTube Embeds
 
 As GitHub-flavored Markdown does not allow embed tags, each line of the form
 `!VIDEO "[youtube url]"` is converted into a screenshot that links to the video,
