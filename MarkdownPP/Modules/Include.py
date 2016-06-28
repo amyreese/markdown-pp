@@ -31,7 +31,6 @@ class Include(Module):
         for line in data:
             match = self.includere.search(line)
             if match:
-                print(line)
                 includedata = self.include(match)
 
                 transform = Transform(linenum=linenum, oper="swap",
