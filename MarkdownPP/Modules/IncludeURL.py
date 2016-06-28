@@ -16,13 +16,10 @@ except ImportError:
     from urllib import urlopen
     from urlparse import urlparse
 
-from MarkdownPP.Module import Module
-from MarkdownPP.Transform import Transform
-
-include_url_re = re.compile("^!INCLUDEURL\s+(?:\"([^\"]+)\"|'([^']+)')\s*$")
+from MarkdownPP.Modules.Include import Include
 
 
-class IncludeURL(Module):
+class IncludeURL(Include):
     """
     Module for recursively including the contents of other remote files into
     the current document using a command like
@@ -30,25 +27,10 @@ class IncludeURL(Module):
     Targets must be valid, absolute urls.
     """
 
+    includere = re.compile("^!INCLUDEURL\s+(?:\"([^\"]+)\"|'([^']+)')\s*$")
+
     # include urls should happen after includes, but before everything else
     priority = 0.1
-
-    def transform(self, data):
-        transforms = []
-
-        line_num = 0
-        for line in data:
-            match = include_url_re.search(line)
-            if match:
-                include_data = self.include(match)
-
-                transform = Transform(linenum=line_num, oper="swap",
-                                      data=include_data)
-                transforms.append(transform)
-
-            line_num += 1
-
-        return transforms
 
     def include(self, match):
         if match.group(1) is None:
@@ -67,7 +49,7 @@ class IncludeURL(Module):
         if data:
             # recursively include url data
             for line_num, line in enumerate(data):
-                match = include_url_re.search(line)
+                match = self.includere.search(line)
                 if match:
                     data[line_num:line_num+1] = self.include(match)
 

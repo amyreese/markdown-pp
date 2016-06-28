@@ -11,8 +11,6 @@ from os import path
 from MarkdownPP.Module import Module
 from MarkdownPP.Transform import Transform
 
-includere = re.compile("^!INCLUDE\s+(?:\"([^\"]+)\"|'([^']+)')\s*$")
-
 
 class Include(Module):
     """
@@ -20,6 +18,8 @@ class Include(Module):
     current document using a command like `!INCLUDE "path/to/filename"`.
     Target paths can be absolute or relative to the file containing the command
     """
+
+    includere = re.compile("^!INCLUDE\s+(?:\"([^\"]+)\"|'([^']+)')\s*$")
 
     # includes should happen before anything else
     priority = 0
@@ -29,8 +29,9 @@ class Include(Module):
 
         linenum = 0
         for line in data:
-            match = includere.search(line)
+            match = self.includere.search(line)
             if match:
+                print(line)
                 includedata = self.include(match)
 
                 transform = Transform(linenum=linenum, oper="swap",
@@ -58,7 +59,7 @@ class Include(Module):
             # recursively include file data
             linenum = 0
             for line in data:
-                match = includere.search(line)
+                match = self.includere.search(line)
                 if match:
                     dirname = path.dirname(filename)
                     data[linenum:linenum+1] = self.include(match, dirname)
