@@ -81,6 +81,36 @@ Compiling `index.mdpp` with the Include module will produce the following:
 	Hello
 	World!
 
+### IncludeURLs
+
+Facilitates the inclusion of remote files, such as files kept in a subversion
+or GitHub repository. Like Include, the IncludeURL module can replace a line of
+the form `!INCLUDEURL "http://your.domain/path/to/filename"` with the contents
+returned from that url, recursively including additional remote urls as needed.
+
+IncludeURL runs immediately after the Include module finishes executing. This
+means that is it possible to include local files that then require remote files,
+but impossible parse !INCLUDE statements found in remote files. This is prevent
+ambiguity as to where the file would be located.
+
+Remote file `http://your.domain/foo.mdpp`:
+
+    Hello
+
+Remote file `http://your.domain/bar.mdpp`:
+
+    Remote World!
+
+Local file `index.mdpp`:
+
+    !INCLUDEURL "http://your.domain/foo.mdpp"
+    !INCLUDEURL "http://your.domain/bar.mdpp"
+
+Compiling `index.mdpp` with the IncludeURL module will produce the following:
+
+    Hello
+    Remote World!
+
 ### Table of Contents
 
 The biggest feature provided by MarkdownPP is the generation of a table of
