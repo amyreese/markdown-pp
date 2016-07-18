@@ -67,7 +67,7 @@ class Include(Module):
 
             return data
 
-        except FileNotFoundError as exc:
+        except (FileNotFoundError, IOError) as exc:
             print(exc)
 
         return []
