@@ -50,7 +50,7 @@ class Include(Module):
         if not path.isabs(filename):
             filename = path.join(pwd, filename)
 
-        if path.isfile(filename):
+        try:
             f = open(filename, "r")
             data = f.readlines()
             f.close()
@@ -66,5 +66,8 @@ class Include(Module):
                 linenum += 1
 
             return data
+
+        except FileNotFoundError as exc:
+            print(exc)
 
         return []
