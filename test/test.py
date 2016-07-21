@@ -16,34 +16,35 @@ from io import StringIO
 class MarkdownPPTests(unittest.TestCase):
 
     def test_include(self):
-        output = StringIO()
+        input = StringIO('foobar\n!INCLUDE "test_include.md"\n')
+        result = 'foobar\nThis is a test.\n'
 
-        MarkdownPP(input=StringIO('foobar\n!INCLUDE "test_include.md"\n'),
-                   modules=['include'],
-                   output=output)
+        output = StringIO()
+        MarkdownPP(input=input, modules=['include'], output=output)
 
         output.seek(0)
-        self.assertEqual(output.read(), 'foobar\nThis is a test.\n')
+        self.assertEqual(output.read(), result)
 
     def test_include_url(self):
-        output = StringIO()
         path = os.path.join(os.getcwd(), "test_include.md")
+        input = StringIO('foobar\n!INCLUDEURL "file://{}"\n'.format(path))
+        result = 'foobar\nThis is a test.\n'
 
-        MarkdownPP(input=StringIO('foobar\n!INCLUDEURL "file://{}"\n'.format(path)),
-                   modules=['includeurl'],
-                   output=output)
+        output = StringIO()
+        MarkdownPP(input=input, modules=['includeurl'], output=output)
 
         output.seek(0)
-        self.assertEqual(output.read(), 'foobar\nThis is a test.\n')
+        self.assertEqual(output.read(), result)
 
     def test_youtube(self):
+        input = StringIO('foobar\n!VIDEO "http://www.youtube.com/embed/7aEYoP5-duY"\n')
+        result = 'foobar\n[![Link to Youtube video](images/youtube/7aEYoP5-duY.png)](http://www.youtube.com/watch?v=7aEYoP5-duY)\n'
+
         output = StringIO()
-        MarkdownPP(input=StringIO('foobar\n!VIDEO "http://www.youtube.com/embed/7aEYoP5-duY"\n'),
-                   modules=['youtubeembed'],
-                   output=output)
+        MarkdownPP(input=input, modules=['youtubeembed'], output=output)
 
         output.seek(0)
-        self.assertEqual(output.read(), 'foobar\n[![Link to Youtube video](images/youtube/7aEYoP5-duY.png)](http://www.youtube.com/watch?v=7aEYoP5-duY)\n')
+        self.assertEqual(output.read(), result)
 
     def test_toc(self):
         input = StringIO('\n# Document Title\n\n'
