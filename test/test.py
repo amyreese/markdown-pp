@@ -10,6 +10,7 @@ import unittest
 import os
 import re
 from MarkdownPP import MarkdownPP
+from MarkdownPP import modules as Modules
 from io import StringIO
 
 
@@ -99,6 +100,19 @@ class MarkdownPPTests(unittest.TestCase):
         match = re.match(result_re, output_str)
         self.assertIsNotNone(match)
         self.assertEqual(match.span(), (0, len(output_str)))
+
+    def test_file(self):
+        with open('../readme.mdpp', 'r') as mdpp, open('../readme.md', 'r') as md:
+            input = mdpp
+            result = md.read()
+
+            output = StringIO()
+            modules = list(Modules.keys())
+            MarkdownPP(input=input, modules=modules, output=output)
+
+        output.seek(0)
+        self.assertEqual(output.read(), result)
+
 
 
 
