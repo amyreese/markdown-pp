@@ -35,6 +35,15 @@ class MarkdownPPTests(unittest.TestCase):
         output.seek(0)
         self.assertEqual(output.read(), 'foobar\nThis is a test.\n')
 
+    def test_youtube(self):
+        output = StringIO()
+        MarkdownPP(input=StringIO('foobar\n!VIDEO "http://www.youtube.com/embed/7aEYoP5-duY"\n'),
+                   modules=['youtubeembed'],
+                   output=output)
+
+        output.seek(0)
+        self.assertEqual(output.read(), 'foobar\n[![Link to Youtube video](images/youtube/7aEYoP5-duY.png)](http://www.youtube.com/watch?v=7aEYoP5-duY)\n')
+
 
 
 if __name__ == '__main__':
