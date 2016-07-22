@@ -22,7 +22,6 @@ except ImportError:
     from io import StringIO
 
 
-
 class MarkdownPPTests(unittest.TestCase):
 
     def test_include(self):
