@@ -19,9 +19,7 @@ class MarkdownPP:
     def __init__(self, input=None, output=None, modules=None):
         pp = Processor()
 
-        map(str.lower, modules)
-
-        for name in modules:
+        for name in [m.lower() for m in modules]:
             if name in Modules.modules:
                 module = Modules.modules[name]()
                 pp.register(module)
