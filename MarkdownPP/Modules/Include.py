@@ -20,7 +20,8 @@ class Include(Module):
     """
 
     # matches !INCLUDE directives in .mdpp files
-    includere = re.compile(r"^!INCLUDE\s+(?:\"([^\"]+)\"|'([^']+)')\s*(?:,\s*(\d+))?\s*$")
+    includere = re.compile(r"^!INCLUDE\s+(?:\"([^\"]+)\"|'([^']+)')"
+                           "\s*(?:,\s*(\d+))?\s*$")
 
     # matches title lines in Markdown files
     titlere = re.compile(r"^#+.*$")
