@@ -38,7 +38,7 @@ class MarkdownPPFileEventHandler(PatternMatchingEventHandler):
 
         # Logs time and file changed (with colors!)
         print(time.strftime("%c") + ":",
-            colors.MAGB + event.src_path, 
+            colors.MAGB + event.src_path,
             colors.GREEN + event.event_type,
             "and processed with MarkdownPP",
             colors.NORMAL)
@@ -66,7 +66,31 @@ parser.add_argument('-e', '--exclude',
                     help='List of modules to exclude, separated by commas. '
                     'Available modules: ' +
                     ', '.join(MarkdownPP.modules.keys()))
+parser.add_argument('-r', '--recursive', action='store_true',
+                    help='Processes all .mdpp files under directory. ')
 args = parser.parse_args()
+
+def preprocess(infile, outfile):
+    """Call MarkdownPP on infile."""
+    mdpp = open(infile, 'r')
+    if outfile:
+        md = open(outfile, 'w')
+    else:
+        md = sys.stdout
+
+    modules = MarkdownPP.modules.keys()
+
+    if args.exclude:
+        for module in args.exclude.split(','):
+            if module in modules:
+                modules.remove(module)
+            else:
+                print('Cannot exclude ', module, ' - no such module')
+
+    MarkdownPP.MarkdownPP(input=mdpp, output=md, modules=modules)
+
+    mdpp.close()
+    md.close()
 
 # If watch flag is on, watch dirs instead of processing individual file
 if args.watch:
@@ -88,23 +112,12 @@ if args.watch:
         observer.stop()
     observer.join()
 
+elif args.recursive:
+    for current, subdirs, files in os.walk(args.FILENAME):
+        for mdppfile in (os.path.abspath(os.path.join(current, f)) for f in
+                         files if f.endswith('.mdpp')):
+            print('{} -> {}'.format(mdppfile, mdppfile[:-5] + '.md'))
+            preprocess(mdppfile, mdppfile[:-5] + '.md')
+
 else:
-    mdpp = open(args.FILENAME, 'r')
-    if args.output:
-        md = open(args.output, 'w')
-    else:
-        md = sys.stdout
-
-    modules = MarkdownPP.modules.keys()
-
-    if args.exclude:
-        for module in args.exclude.split(','):
-            if module in modules:
-                modules.remove(module)
-            else:
-                print('Cannot exclude ', module, ' - no such module')
-
-    MarkdownPP.MarkdownPP(input=mdpp, output=md, modules=modules)
-
-    mdpp.close()
-    md.close()
+    preprocess(args.FILENAME, args.output)
