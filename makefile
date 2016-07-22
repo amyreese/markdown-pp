@@ -16,6 +16,7 @@ lint:
 test: lint
 	python bin/markdown-pp readme.mdpp -o readme.test && diff -u readme.md readme.test
 	rm -f readme.test
+	cd test/ && python test.py
 
 clean:
 	rm -rf build dist README MANIFEST MarkdownPP.egg-info
