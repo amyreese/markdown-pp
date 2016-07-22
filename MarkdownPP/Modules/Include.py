@@ -70,15 +70,20 @@ class Include(Module):
                     data[linenum:linenum+1] = self.include(match, dirname)
 
                 if shift:
+
                     titlematch = self.titlere.search(line)
                     if titlematch:
-                        if data[linenum][0] == '#':
-                            data[linenum] = ("#" * shift) + data[linenum]
-                        elif data[linenum][0] == '=':
-                            data[linenum] = data[linenum].replace("=", '-')
-                        elif data[linenum][0] == '-':
-                            data[linenum - 1] = '### ' + data[linenum - 1]
-                            del data[linenum]
+                        to_del = []
+                        for _ in range(shift):
+                            if data[linenum][0] == '#':
+                                data[linenum] = "#" + data[linenum]
+                            elif data[linenum][0] == '=':
+                                data[linenum] = data[linenum].replace("=", '-')
+                            elif data[linenum][0] == '-':
+                                data[linenum] = '### ' + data[linenum - 1]
+                                to_del.append(linenum - 1)
+                        for l in to_del:
+                            del data[l]
 
                 linenum += 1
 
