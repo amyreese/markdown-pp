@@ -15,7 +15,12 @@ import os
 import re
 from MarkdownPP import MarkdownPP
 from MarkdownPP import modules as Modules
-from io import StringIO
+
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
+
 
 
 class MarkdownPPTests(unittest.TestCase):
