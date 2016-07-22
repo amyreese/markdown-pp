@@ -24,7 +24,7 @@ class Include(Module):
                            "\s*(?:,\s*(\d+))?\s*$")
 
     # matches title lines in Markdown files
-    titlere = re.compile(r"^#+.*$")
+    titlere = re.compile(r"^(:?#+.*|={3,}|-{3,})$")
 
     # includes should happen before anything else
     priority = 0
@@ -72,7 +72,13 @@ class Include(Module):
                 if shift:
                     titlematch = self.titlere.search(line)
                     if titlematch:
-                        data[linenum] = ("#" * shift) + data[linenum]
+                        if data[linenum][0] == '#':
+                            data[linenum] = ("#" * shift) + data[linenum]
+                        elif data[linenum][0] == '=':
+                            data[linenum] = data[linenum].replace("=", '-')
+                        elif data[linenum][0] == '-':
+                            data[linenum - 1] = '### ' + data[linenum - 1]
+                            del data[linenum]
 
                 linenum += 1
 
