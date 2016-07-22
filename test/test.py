@@ -114,7 +114,5 @@ class MarkdownPPTests(unittest.TestCase):
         self.assertEqual(output.read(), result)
 
 
-
-
 if __name__ == '__main__':
     unittest.main()
