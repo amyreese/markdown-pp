@@ -39,7 +39,7 @@ class IncludeURL(Include):
             url = match.group(1)
 
         parsed_url = urlparse(url)
-        if not parsed_url.netloc:
+        if not parsed_url.netloc and not parsed_url.path:
             return []
 
         binary_data = urlopen(url).readlines()
