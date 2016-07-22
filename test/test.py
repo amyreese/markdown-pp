@@ -38,8 +38,11 @@ class MarkdownPPTests(unittest.TestCase):
         self.assertEqual(output.read(), result)
 
     def test_youtube(self):
-        input = StringIO('foobar\n!VIDEO "http://www.youtube.com/embed/7aEYoP5-duY"\n')
-        result = 'foobar\n[![Link to Youtube video](images/youtube/7aEYoP5-duY.png)](http://www.youtube.com/watch?v=7aEYoP5-duY)\n'
+        input = StringIO('foobar\n!VIDEO '
+                         '"http://www.youtube.com/embed/7aEYoP5-duY"\n')
+        result = ('foobar\n'
+                  '[![Link to Youtube video](images/youtube/7aEYoP5-duY.png)]'
+                  '(http://www.youtube.com/watch?v=7aEYoP5-duY)\n')
 
         output = StringIO()
         MarkdownPP(input=input, modules=['youtubeembed'], output=output)
@@ -80,7 +83,8 @@ class MarkdownPPTests(unittest.TestCase):
 
     def test_reference(self):
         input = StringIO('\n!REF\n\n[github]: http://github.com "GitHub"')
-        result = '\n*\t[GitHub][github]\n\n[github]: http://github.com "GitHub"'
+        result = ('\n*\t[GitHub][github]\n\n[github]: '
+                  'http://github.com "GitHub"')
 
         output = StringIO()
         MarkdownPP(input=input, modules=['reference'], output=output)
@@ -90,7 +94,9 @@ class MarkdownPPTests(unittest.TestCase):
 
     def test_latexrender(self):
         input = StringIO('$\displaystyle 1 + 1 = 2 $')
-        result_re = r'!\[\\displaystyle 1 \+ 1 = 2 \]\(http:\/\/quicklatex\.com\/.*\.png "\\displaystyle 1 \+ 1 = 2 "\)'
+        result_re = (r'!\[\\displaystyle 1 \+ 1 = 2 \]'
+                     r'\(http:\/\/quicklatex\.com\/.*\.png "'
+                     r'\\displaystyle 1 \+ 1 = 2 "\)')
 
         output = StringIO()
         MarkdownPP(input=input, modules=['latexrender'], output=output)
@@ -102,9 +108,11 @@ class MarkdownPPTests(unittest.TestCase):
         self.assertEqual(match.span(), (0, len(output_str)))
 
     def test_file(self):
-        with open('../readme.mdpp', 'r') as mdpp, open('../readme.md', 'r') as md:
-            input = mdpp
+        with open('../readme.md', 'r') as md:
             result = md.read()
+
+        with open('../readme.mdpp', 'r') as mdpp:
+            input = mdpp
 
             output = StringIO()
             modules = list(Modules.keys())
