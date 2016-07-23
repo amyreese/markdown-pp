@@ -26,7 +26,7 @@ except ImportError:
 class MarkdownPPTests(unittest.TestCase):
 
     def test_include(self):
-        input = StringIO('foobar\n!INCLUDE "test_include.md"\n')
+        input = StringIO('foobar\n!INCLUDE "datafiles/test_include.md"\n')
         result = 'foobar\nThis is a test.\n'
 
         output = StringIO()
@@ -36,7 +36,7 @@ class MarkdownPPTests(unittest.TestCase):
         self.assertEqual(output.read(), result)
 
     def test_include_url(self):
-        path = os.path.join(os.getcwd(), "test_include.md")
+        path = os.path.join(os.getcwd(), "datafiles/test_include.md")
         input = StringIO('foobar\n!INCLUDEURL "file://{}"\n'.format(path))
         result = 'foobar\nThis is a test.\n'
 
@@ -132,7 +132,7 @@ class MarkdownPPTests(unittest.TestCase):
 
     def test_include_shift(self):
         # test shift=1
-        input = StringIO('!INCLUDE "test_shift.mdpp", 1\n')
+        input = StringIO('!INCLUDE "datafiles/test_shift.mdpp", 1\n')
         with open('test_shift.md', 'r') as resfile:
             result = resfile.read()
 
@@ -152,7 +152,7 @@ class MarkdownPPTests(unittest.TestCase):
         output1 = StringIO()
         MarkdownPP(input=input1, modules=['include'], output=output1)
 
-        input2 = StringIO('!INCLUDE "test_shift.mdpp", 2\n')
+        input2 = StringIO('!INCLUDE "datafiles/test_shift.mdpp", 2\n')
         output2 = StringIO()
         MarkdownPP(input=input2, modules=['include'], output=output2)
 
