@@ -133,7 +133,7 @@ class MarkdownPPTests(unittest.TestCase):
     def test_include_shift(self):
         # test shift=1
         input = StringIO('!INCLUDE "datafiles/test_shift.mdpp", 1\n')
-        with open('test_shift.md', 'r') as resfile:
+        with open('datafiles/test_shift.md', 'r') as resfile:
             result = resfile.read()
 
         output = StringIO()
