@@ -15,6 +15,7 @@ import os
 import re
 from MarkdownPP import MarkdownPP
 from MarkdownPP import modules as Modules
+from tempfile import NamedTemporaryFile
 
 try:
     from StringIO import StringIO
@@ -25,7 +26,7 @@ except ImportError:
 class MarkdownPPTests(unittest.TestCase):
 
     def test_include(self):
-        input = StringIO('foobar\n!INCLUDE "test_include.md"\n')
+        input = StringIO('foobar\n!INCLUDE "datafiles/test_include.md"\n')
         result = 'foobar\nThis is a test.\n'
 
         output = StringIO()
@@ -35,7 +36,7 @@ class MarkdownPPTests(unittest.TestCase):
         self.assertEqual(output.read(), result)
 
     def test_include_url(self):
-        path = os.path.join(os.getcwd(), "test_include.md")
+        path = os.path.join(os.getcwd(), "datafiles/test_include.md")
         input = StringIO('foobar\n!INCLUDEURL "file://{}"\n'.format(path))
         result = 'foobar\nThis is a test.\n'
 
@@ -128,6 +129,38 @@ class MarkdownPPTests(unittest.TestCase):
 
         output.seek(0)
         self.assertEqual(output.read(), result)
+
+    def test_include_shift(self):
+        # test shift=1
+        input = StringIO('!INCLUDE "datafiles/test_shift.mdpp", 1\n')
+        with open('datafiles/test_shift.md', 'r') as resfile:
+            result = resfile.read()
+
+        output = StringIO()
+        MarkdownPP(input=input, modules=['include'], output=output)
+
+        output.seek(0)
+        self.assertEqual(output.read(), result)
+
+        # test shift=2, by shifting again the previous output
+        output.seek(0)
+        with NamedTemporaryFile(delete=False) as temp:
+            temp.write(output.read().encode('utf-8'))
+            name = temp.name
+
+        input1 = StringIO('!INCLUDE "{}", 1\n'.format(name))
+        output1 = StringIO()
+        MarkdownPP(input=input1, modules=['include'], output=output1)
+
+        input2 = StringIO('!INCLUDE "datafiles/test_shift.mdpp", 2\n')
+        output2 = StringIO()
+        MarkdownPP(input=input2, modules=['include'], output=output2)
+
+        output1.seek(0)
+        output2.seek(0)
+
+        self.assertEqual(output1.read(), output2.read())
+        os.remove(name)
 
 
 if __name__ == '__main__':
