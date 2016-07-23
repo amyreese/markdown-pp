@@ -97,6 +97,28 @@ Compiling `index.mdpp` with the Include module will produce the following:
 	Hello
 	World!
 
+Furthermore, the Include module supports the shifting of headers in the
+file to be included. For example,
+
+File `foo.mdpp`:
+
+    # Foo
+    ## Bar
+
+File `index.mdpp`:
+
+    # Title
+    ## Subtitle
+    !INCLUDE "foo.mdpp", 2
+
+Compiling `index.mdpp` with the Include module and using `2` as shift
+parameter will yield:
+
+    # Title
+    ## Subtitle
+    ### Foo
+    #### Bar
+
 <a name="includeurls"></a>
 
 ### 2.2\. IncludeURLs
