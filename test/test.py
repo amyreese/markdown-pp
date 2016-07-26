@@ -37,8 +37,8 @@ class MarkdownPPTests(unittest.TestCase):
         self.assertEqual(output.read(), result)
 
     def test_include_url(self):
-        path = os.path.join(os.getcwd(), "datafiles/test_include.md")
-        input = StringIO('foobar\n!INCLUDEURL "file://{}"\n'.format(path))
+        input = StringIO('foobar\n!INCLUDEURL '
+                         '"file:datafiles/test_include.md"\n')
         result = 'foobar\nThis is a test.\n'
 
         output = StringIO()
@@ -166,7 +166,7 @@ class MarkdownPPTests(unittest.TestCase):
     def test_script(self):
         # test the script without arguments
         with NamedTemporaryFile(delete=False) as temp_outfile:
-            subprocess.run(['markdown-pp', 'datafiles/test_script.mdpp', '-o',
+            subprocess.call(['markdown-pp', 'datafiles/test_script.mdpp', '-o',
                             temp_outfile.name])
 
             with open('datafiles/test_script.txt', 'r') as target_outfile:

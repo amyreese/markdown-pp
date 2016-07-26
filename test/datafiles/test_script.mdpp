@@ -9,7 +9,7 @@
 
 
 # Test include url
-!INCLUDEURL "file:///home/leo/code/markdown-pp/test/datafiles/test_include.md"
+!INCLUDEURL "file:datafiles/test_include.md"
 
 
 # Test youtube embed
