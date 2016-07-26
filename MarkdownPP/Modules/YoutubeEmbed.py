@@ -8,6 +8,7 @@ from __future__ import unicode_literals
 import re
 import os
 import urllib
+import logging
 
 from MarkdownPP.Module import Module
 from MarkdownPP.Transform import Transform
@@ -80,9 +81,10 @@ class YoutubeEmbed(Module):
                             background.save(processed_image_path)
 
                         except Exception as e:
-                            print('Unable to add play button to YouTube '
-                                  'screenshot (%s). Using the screenshot '
-                                  'on its own instead.' % e)
+                            logging.warning('Unable to add play button to '
+                                            'YouTube screenshot (%s). Using '
+                                            'the screenshot on its own '
+                                            'instead.', e)
 
                     image_link = ('[![Link to Youtube video](%s)](%s)\n' %
                                   (processed_image_path, video_url))

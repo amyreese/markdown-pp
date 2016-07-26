@@ -14,7 +14,7 @@ lint:
 	flake8 --show-source .
 
 test: lint
-	python bin/markdown-pp readme.mdpp -o readme.test && diff -u readme.md readme.test
+	python bin/markdown-pp readme.mdpp -o readme.test -v && diff -u readme.md readme.test
 	rm -f readme.test
 	cd test/ && python test.py
 

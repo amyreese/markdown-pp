@@ -6,6 +6,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import re
+import logging
 
 try:
     from http.client import HTTPConnection
@@ -99,7 +100,7 @@ class LaTeXRender(Module):
         formula = formula.replace("$", "")
         encoded_formula = formula.replace("%", "[comment]").replace("+", "%2B")
         display_formula = formula.replace("\n", "")
-        print('Rendering: %s ...' % display_formula)
+        logging.info('Rendering: %s ...', display_formula)
 
         # Prepare POST request to QuickLaTeX via ProblemSetMarmoset
         # (for added processing)
