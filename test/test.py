@@ -13,6 +13,7 @@ from __future__ import unicode_literals
 import unittest
 import os
 import re
+import subprocess
 from MarkdownPP import MarkdownPP
 from MarkdownPP import modules as Modules
 from tempfile import NamedTemporaryFile
@@ -161,6 +162,18 @@ class MarkdownPPTests(unittest.TestCase):
 
         self.assertEqual(output1.read(), output2.read())
         os.remove(name)
+
+    def test_script(self):
+        # test the script without arguments
+        with NamedTemporaryFile(delete=False) as temp_outfile:
+            subprocess.run(['markdown-pp', 'datafiles/test_script.mdpp', '-o',
+                            temp_outfile.name])
+
+            with open('datafiles/test_script.txt', 'r') as target_outfile:
+                target_out = target_outfile.read()
+
+            temp_outfile.seek(0)
+            self.assertEqual(target_out, temp_outfile.read().decode('utf-8'))
 
 
 if __name__ == '__main__':
