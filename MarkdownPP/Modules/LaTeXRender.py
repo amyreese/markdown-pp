@@ -116,6 +116,7 @@ class LaTeXRender(Module):
         conn.request("POST", "/latex/render.php", params, headers)
         response = conn.getresponse()
         img_url = response.read()
+        conn.close()
 
         # Display as Markdown image
         rendered_tex = '![{0}]({1} "{0}")\n'.format(display_formula,
