@@ -13,6 +13,7 @@ from __future__ import unicode_literals
 import unittest
 import os
 import re
+import subprocess
 from MarkdownPP import MarkdownPP
 from MarkdownPP import modules as Modules
 from tempfile import NamedTemporaryFile
@@ -36,8 +37,8 @@ class MarkdownPPTests(unittest.TestCase):
         self.assertEqual(output.read(), result)
 
     def test_include_url(self):
-        path = os.path.join(os.getcwd(), "datafiles/test_include.md")
-        input = StringIO('foobar\n!INCLUDEURL "file://{}"\n'.format(path))
+        input = StringIO('foobar\n!INCLUDEURL '
+                         '"file:datafiles/test_include.md"\n')
         result = 'foobar\nThis is a test.\n'
 
         output = StringIO()
@@ -161,6 +162,18 @@ class MarkdownPPTests(unittest.TestCase):
 
         self.assertEqual(output1.read(), output2.read())
         os.remove(name)
+
+    def test_script(self):
+        # test the script without arguments
+        with NamedTemporaryFile(delete=False) as temp_outfile:
+            subprocess.call(['markdown-pp', 'datafiles/test_script.mdpp', '-o',
+                            temp_outfile.name])
+
+            with open('datafiles/test_script.txt', 'r') as target_outfile:
+                target_out = target_outfile.read()
+
+            temp_outfile.seek(0)
+            self.assertEqual(target_out, temp_outfile.read().decode('utf-8'))
 
 
 if __name__ == '__main__':

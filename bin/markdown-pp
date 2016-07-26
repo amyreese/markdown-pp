@@ -13,15 +13,18 @@ import MarkdownPP
 
 import os
 import time
+import logging
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 
+
 # Terminal output ANSI color codes
 class colors:
-    BLUE   = '\033[36;49;22m'
-    MAGB   = '\033[35;49;1m'
-    GREEN  = '\033[32;49;22m'
+    BLUE = '\033[36;49;22m'
+    MAGB = '\033[35;49;1m'
+    GREEN = '\033[32;49;22m'
     NORMAL = '\033[0m'
+
 
 # Custom event handler for watchdog observer
 class MarkdownPPFileEventHandler(PatternMatchingEventHandler):
@@ -48,70 +51,70 @@ class MarkdownPPFileEventHandler(PatternMatchingEventHandler):
         self.process(event)
 
 
-description = "Preprocessor for Markdown files."
+if __name__ == '__main__':
+    # setup command line arguments
+    parser = argparse.ArgumentParser(description='Preprocessor for '
+                                     'Markdown files.')
 
-parser = argparse.ArgumentParser(description=description)
+    parser.add_argument('FILENAME', help='Input file name (or directory if '
+                        'watching)')
 
-parser.add_argument('FILENAME', help='Input file name (or directory if '
-                    'watching)')
+    # Argument for watching directory and subdirectory to process .mdpp files
+    parser.add_argument('-w', '--watch', action='store_true', help='Watch '
+                        'current directory and subdirectories for changing '
+                        '.mdpp files and process in local directory. File '
+                        'output name is same as file input name.')
+    parser.add_argument('-o', '--output', help='Output file name. '
+                        'If no output file is specified, writes output to '
+                        'stdout.')
+    parser.add_argument('-e', '--exclude', help='List of modules to exclude, '
+                        'separated by commas. Available modules: '
+                        ', '.join(MarkdownPP.modules.keys()))
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help='Show all messages.')
+    parser.add_argument('-D', '--debug', action='store_true',
+                        help='Show all messages, including debug messages.')
+    args = parser.parse_args()
 
-# Argument for watching directory and subdirectory to process .mdpp files
-parser.add_argument('-w', '--watch', action='store_true', help='Watch current '
-                    'directory and subdirectories for changing .mdpp files '
-                    'and process in local directory. File output name is same '
-                    'as file input name.')
-parser.add_argument('-o', '--output', help='Output file name. '
-                    'If no output file is specified, writes output to stdout.')
-parser.add_argument('-e', '--exclude', help='List of modules to exclude, '
-                    'separated by commas. Available modules: '
-                    ', '.join(MarkdownPP.modules.keys()))
-parser.add_argument('-v', '--verbose', action='store_true',
-                    help='Show all messages.')
-parser.add_argument('-D', '--debug', action='store_true',
-                    help='Show all messages, including debug messages.')
-args = parser.parse_args()
-
-
-# set logging level
-if args.debug:
-    numeric_level = getattr(logging, 'DEBUG', None)
-elif args.verbose:
-    numeric_level = getattr(logging, 'INFO', None)
-else:
-    numeric_level = getattr(logging, 'WARNING', None)
-
-logging.basicConfig(level=numeric_level,
-                    format='%(levelname)s:%(filename)s:%(message)s')
-
-
-# If watch flag is on, watch dirs instead of processing individual file
-if args.watch:
-    # Get full directory path to print
-    p = os.path.abspath(args.FILENAME)
-    print("Watching: " + p + " (and subdirectories)")
-
-    # Custom watchdog event handler specific for .mdpp files
-    event_handler = MarkdownPPFileEventHandler()
-    observer = Observer()
-    # pass event handler, directory, and flag to recurse subdirectories
-    observer.schedule(event_handler, args.FILENAME, recursive=True)
-    observer.start()
-
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        observer.stop()
-    observer.join()
-
-else:
-    mdpp = open(args.FILENAME, 'r')
-    if args.output:
-        md = open(args.output, 'w')
+    # set logging level
+    if args.debug:
+        numeric_level = getattr(logging, 'DEBUG', None)
+    elif args.verbose:
+        numeric_level = getattr(logging, 'INFO', None)
     else:
-        md = sys.stdout
+        numeric_level = getattr(logging, 'WARNING', None)
 
-    modules = MarkdownPP.modules.keys()
+    logging.basicConfig(level=numeric_level,
+                        format='%(levelname)s:%(filename)s:%(message)s')
+
+    # If watch flag is on, watch dirs instead of processing individual file
+    if args.watch:
+        # Get full directory path to print
+        p = os.path.abspath(args.FILENAME)
+        print("Watching: " + p + " (and subdirectories)")
+
+        # Custom watchdog event handler specific for .mdpp files
+        event_handler = MarkdownPPFileEventHandler()
+        observer = Observer()
+        # pass event handler, directory, and flag to recurse subdirectories
+        observer.schedule(event_handler, args.FILENAME, recursive=True)
+        observer.start()
+
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            observer.stop()
+        observer.join()
+
+    else:
+        mdpp = open(args.FILENAME, 'r')
+        if args.output:
+            md = open(args.output, 'w')
+        else:
+            md = sys.stdout
+
+        modules = MarkdownPP.modules.keys()
 
     if args.exclude:
         for module in args.exclude.split(','):
