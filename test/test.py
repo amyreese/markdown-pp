@@ -11,11 +11,11 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import unittest
-import os
+# import os
 import re
 import subprocess
 from MarkdownPP import MarkdownPP
-from tempfile import NamedTemporaryFile
+# from tempfile import NamedTemporaryFile
 
 try:
     from StringIO import StringIO
@@ -89,36 +89,21 @@ class MarkdownPPTests(unittest.TestCase):
         self.assertEqual(match.span(), (0, len(output_str)))
 
     def test_include_shift(self):
-        # test shift=1
-        input = StringIO('!INCLUDE "shift/test_shift.mdpp", 1\n')
-        with open('shift/test_shift_target.md', 'r') as resfile:
-            result = resfile.read()
-
-        output = StringIO()
-        MarkdownPP(input=input, modules=['include'], output=output)
-
-        output.seek(0)
-        self.assertEqual(output.read(), result)
+        self.assertEqual(*test_prototype('shift'))
 
         # test shift=2, by shifting again the previous output
-        output.seek(0)
-        with NamedTemporaryFile(delete=False) as temp:
-            temp.write(output.read().encode('utf-8'))
-            name = temp.name
-
-        input1 = StringIO('!INCLUDE "{}", 1\n'.format(name))
+        in_string = '!INCLUDE "{}", 1\n'.format(make_outfile_name('shift'))
+        input1 = StringIO(in_string)
         output1 = StringIO()
         MarkdownPP(input=input1, modules=['include'], output=output1)
 
-        input2 = StringIO('!INCLUDE "shift/test_shift.mdpp", 2\n')
+        input2 = StringIO('!INCLUDE "shift/include_me.md", 2\n')
         output2 = StringIO()
         MarkdownPP(input=input2, modules=['include'], output=output2)
 
         output1.seek(0)
         output2.seek(0)
-
         self.assertEqual(output1.read(), output2.read())
-        os.remove(name)
 
     def test_script(self):
         # test the script without arguments
