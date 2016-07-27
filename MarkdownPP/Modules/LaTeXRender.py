@@ -7,6 +7,7 @@ from __future__ import unicode_literals
 
 import re
 import logging
+from contextlib import closing
 
 try:
     from http.client import HTTPConnection
@@ -110,13 +111,12 @@ class LaTeXRender(Module):
         })
         headers = {"Content-type": "application/x-www-form-urlencoded",
                    "Accept": "text/plain"}
-        conn = HTTPConnection("www.problemsetmarmoset.com")
 
         # Make the request
-        conn.request("POST", "/latex/render.php", params, headers)
-        response = conn.getresponse()
-        img_url = response.read()
-        conn.close()
+        with closing(HTTPConnection("www.problemsetmarmoset.com")) as conn:
+            conn.request("POST", "/latex/render.php", params, headers)
+            response = conn.getresponse()
+            img_url = response.read()
 
         # Display as Markdown image
         rendered_tex = '![{0}]({1} "{0}")\n'.format(display_formula,

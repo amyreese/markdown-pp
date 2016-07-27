@@ -59,7 +59,11 @@ class YoutubeEmbed(Module):
                                                         '%s.png' % url)
 
                     # do we already have a screenshot?
-                    if os.path.isfile(processed_image_path):
+                    if not os.path.isfile(processed_image_path):
+                        # create directories if needed
+                        if not os.path.exists(processed_image_dir):
+                            os.makedirs(processed_image_dir)
+
                         self._add_play_button(image_url, processed_image_path)
 
                     image_link = ('[![Link to Youtube video](%s)](%s)\n' %
@@ -82,23 +86,17 @@ class YoutubeEmbed(Module):
                 urlretrieve = urllib.urlretrieve
 
             # create temporary files for image operations
-            screenshot_img = NamedTemporaryFile(suffix=".jpg")
-            button_img = NamedTemporaryFile(suffix=".jpg")
+            with NamedTemporaryFile(suffix=".jpg") as screenshot_img:
+                with NamedTemporaryFile(suffix=".jpg") as button_img:
+                    # grab screenshot and button image
+                    urlretrieve(image_url, screenshot_img.name)
+                    urlretrieve(play_button_url, button_img.name)
 
-            # grab screenshot and button image
-            urlretrieve(image_url, screenshot_img.name)
-            urlretrieve(play_button_url, button_img.name)
-
-            # layer the images using PIL and save
-            background = Image.open(screenshot_img.name)
-            foreground = Image.open(button_img.name)
-            background.paste(foreground, (90, 65), foreground)
-            background.save(image_path)
-
-            background.close()
-            foreground.close()
-            screenshot_img.close()
-            button_img.close()
+                    # layer the images using PIL and save
+                    with Image.open(screenshot_img.name) as background:
+                        with Image.open(button_img.name) as foreground:
+                            background.paste(foreground, (90, 65), foreground)
+                            background.save(image_path)
 
         except ImportError as e:
             logging.error(e)
@@ -106,4 +104,4 @@ class YoutubeEmbed(Module):
         except Exception as e:
             logging.warning('Unable to add play button to YouTube '
                             'screenshot (%s). Using the screenshot '
-                            'on its own instead.', e)
+                            'on its own instead.' % e)
