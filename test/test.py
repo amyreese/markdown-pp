@@ -23,21 +23,37 @@ except ImportError:
     from io import StringIO
 
 
+def read_both_files(filename1, filename2):
+    with open(filename1, 'r') as file1, open(filename2, 'r') as file2:
+        text1 = file1.read()
+        text2 = file2.read()
+
+    return text1, text2
+
+
+def make_infile_name(m):
+    return '{0}/test_{0}.mdpp'.format(m)
+
+
+def make_outfile_name(m):
+    return '{0}/test_{0}.md'.format(m)
+
+
+def make_targetfile_name(m):
+    return '{0}/test_{0}_target.md'.format(m)
+
+
 def test_prototype(module_name):
     """All modules are tested in the same way."""
-    infile_name = '{0}/test_{0}.mdpp'.format(module_name)
-    outfile_name = '{0}/test_{0}.md'.format(module_name)
+    infile_name = make_infile_name(module_name)
+    outfile_name = make_outfile_name(module_name)
 
     with open(infile_name, 'r') as infile, open(outfile_name, 'w+') as outfile:
         MarkdownPP(input=infile, modules=[module_name], output=outfile)
-        outfile.seek(0)
-        out = outfile.read()
 
-    targetfile_name = '{0}/test_{0}_target.md'.format(module_name)
-    with open(targetfile_name, 'r') as targetfile:
-        target = targetfile.read()
+    targetfile_name = make_targetfile_name(module_name)
 
-    return out, target
+    return read_both_files(outfile_name, targetfile_name)
 
 
 class MarkdownPPTests(unittest.TestCase):
