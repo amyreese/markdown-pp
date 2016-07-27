@@ -13,15 +13,18 @@ import MarkdownPP
 
 import os
 import time
+import logging
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 
+
 # Terminal output ANSI color codes
 class colors:
-    BLUE   = '\033[36;49;22m'
-    MAGB   = '\033[35;49;1m'
-    GREEN  = '\033[32;49;22m'
+    BLUE = '\033[36;49;22m'
+    MAGB = '\033[35;49;1m'
+    GREEN = '\033[32;49;22m'
     NORMAL = '\033[0m'
+
 
 # Custom event handler for watchdog observer
 class MarkdownPPFileEventHandler(PatternMatchingEventHandler):
@@ -37,11 +40,9 @@ class MarkdownPPFileEventHandler(PatternMatchingEventHandler):
         MarkdownPP.MarkdownPP(input=mdpp, output=md, modules=modules)
 
         # Logs time and file changed (with colors!)
-        print(time.strftime("%c") + ":",
-            colors.MAGB + event.src_path,
-            colors.GREEN + event.event_type,
-            "and processed with MarkdownPP",
-            colors.NORMAL)
+        logging.info("%s: %s%s %s%s and processed with MarkdownPP%s",
+                     time.strftime("%c"), colors.MAGB, event.src_path,
+                     colors.GREEN, event.event_type, colors.NORMAL)
 
     def on_modified(self, event):
         self.process(event)
@@ -49,26 +50,6 @@ class MarkdownPPFileEventHandler(PatternMatchingEventHandler):
     def on_created(self, event):
         self.process(event)
 
-
-description = "Preprocessor for Markdown files."
-
-parser = argparse.ArgumentParser(description=description)
-
-# Argument for watching directory and subdirectory to process .mdpp files
-parser.add_argument('-w', '--watch', action='store_true', help='Watch current '
-                    'directory and subdirectories for changing .mdpp files and '
-                    'process in local directory. File output name is same as '
-                    'file input name.')
-parser.add_argument('FILENAME', help='Input file name (or directory if watching)')
-parser.add_argument('-o', '--output', help='Output file name. '
-                    'If no output file is specified, writes output to stdout.')
-parser.add_argument('-e', '--exclude',
-                    help='List of modules to exclude, separated by commas. '
-                    'Available modules: ' +
-                    ', '.join(MarkdownPP.modules.keys()))
-parser.add_argument('-r', '--recursive', action='store_true',
-                    help='Processes all .mdpp files under directory. ')
-args = parser.parse_args()
 
 def preprocess(infile, outfile):
     """Call MarkdownPP on infile."""
@@ -92,32 +73,71 @@ def preprocess(infile, outfile):
     mdpp.close()
     md.close()
 
-# If watch flag is on, watch dirs instead of processing individual file
-if args.watch:
-    # Get full directory path to print
-    p = os.path.abspath(args.FILENAME)
-    print("Watching: " + p + " (and subdirectories)")
 
-    # Custom watchdog event handler specific for .mdpp files
-    event_handler = MarkdownPPFileEventHandler()
-    observer = Observer()
-    # pass event handler, directory, and flag to recurse subdirectories
-    observer.schedule(event_handler, args.FILENAME, recursive=True)
-    observer.start()
+if __name__ == '__main__':
+    # setup command line arguments
+    parser = argparse.ArgumentParser(description='Preprocessor for '
+                                     'Markdown files.')
 
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        observer.stop()
-    observer.join()
+    parser.add_argument('FILENAME', help='Input file name (or directory if '
+                        'watching)')
 
-elif args.recursive:
-    for current, subdirs, files in os.walk(args.FILENAME):
-        for mdppfile in (os.path.abspath(os.path.join(current, f)) for f in
-                         files if f.endswith('.mdpp')):
-            print('{} -> {}'.format(mdppfile, mdppfile[:-5] + '.md'))
-            preprocess(mdppfile, mdppfile[:-5] + '.md')
+    # Argument for watching directory and subdirectory to process .mdpp files
+    parser.add_argument('-w', '--watch', action='store_true', help='Watch '
+                        'current directory and subdirectories for changing '
+                        '.mdpp files and process in local directory. File '
+                        'output name is same as file input name.')
+    parser.add_argument('-o', '--output', help='Output file name. '
+                        'If no output file is specified, writes output to '
+                        'stdout.')
+    parser.add_argument('-e', '--exclude', help='List of modules to exclude, '
+                        'separated by commas. Available modules: '
+                        ', '.join(MarkdownPP.modules.keys()))
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help='Show all messages.')
+    parser.add_argument('-D', '--debug', action='store_true',
+                        help='Show all messages, including debug messages.')
+    parser.add_argument('-r', '--recursive', action='store_true',
+                        help='Processes all .mdpp files under directory. ')
+    args = parser.parse_args()
 
-else:
-    preprocess(args.FILENAME, args.output)
+    # set logging level
+    if args.debug:
+        numeric_level = getattr(logging, 'DEBUG', None)
+    elif args.verbose:
+        numeric_level = getattr(logging, 'INFO', None)
+    else:
+        numeric_level = getattr(logging, 'WARNING', None)
+
+    logging.basicConfig(level=numeric_level,
+                        format='%(levelname)s:%(filename)s:%(message)s')
+
+    # If watch flag is on, watch dirs instead of processing individual file
+    if args.watch:
+        # Get full directory path to print
+        p = os.path.abspath(args.FILENAME)
+        print("Watching: " + p + " (and subdirectories)")
+
+        # Custom watchdog event handler specific for .mdpp files
+        event_handler = MarkdownPPFileEventHandler()
+        observer = Observer()
+        # pass event handler, directory, and flag to recurse subdirectories
+        observer.schedule(event_handler, args.FILENAME, recursive=True)
+        observer.start()
+
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            observer.stop()
+        observer.join()
+
+    elif args.recursive:
+        for current, subdirs, files in os.walk(args.FILENAME):
+            for mdppfile in (os.path.abspath(os.path.join(current, f)) for f in
+                             files if f.endswith('.mdpp')):
+                print('{} -> {}'.format(mdppfile, mdppfile[:-5] + '.md'))
+                preprocess(mdppfile, mdppfile[:-5] + '.md')
+
+    else:
+        preprocess(args.FILENAME, args.output)
