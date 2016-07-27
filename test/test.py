@@ -15,7 +15,6 @@ import os
 import re
 import subprocess
 from MarkdownPP import MarkdownPP
-from MarkdownPP import modules as Modules
 from tempfile import NamedTemporaryFile
 
 try:
@@ -24,83 +23,39 @@ except ImportError:
     from io import StringIO
 
 
+def test_prototype(module_name):
+    """All modules are tested in the same way."""
+    infile_name = '{0}/test_{0}.mdpp'.format(module_name)
+    outfile_name = '{0}/test_{0}.md'.format(module_name)
+
+    with open(infile_name, 'r') as infile, open(outfile_name, 'w+') as outfile:
+        MarkdownPP(input=infile, modules=[module_name], output=outfile)
+        outfile.seek(0)
+        out = outfile.read()
+
+    targetfile_name = '{0}/test_{0}_target.md'.format(module_name)
+    with open(targetfile_name, 'r') as targetfile:
+        target = targetfile.read()
+
+    return out, target
+
+
 class MarkdownPPTests(unittest.TestCase):
 
     def test_include(self):
-        input = StringIO('foobar\n!INCLUDE "datafiles/test_include.md"\n')
-        result = 'foobar\nThis is a test.\n'
+        self.assertEqual(*test_prototype('include'))
 
-        output = StringIO()
-        MarkdownPP(input=input, modules=['include'], output=output)
+    def test_includeurl(self):
+        self.assertEqual(*test_prototype('includeurl'))
 
-        output.seek(0)
-        self.assertEqual(output.read(), result)
+    def test_youtubeembed(self):
+        self.assertEqual(*test_prototype('youtubeembed'))
 
-    def test_include_url(self):
-        input = StringIO('foobar\n!INCLUDEURL '
-                         '"file:datafiles/test_include.md"\n')
-        result = 'foobar\nThis is a test.\n'
-
-        output = StringIO()
-        MarkdownPP(input=input, modules=['includeurl'], output=output)
-
-        output.seek(0)
-        self.assertEqual(output.read(), result)
-
-    def test_youtube(self):
-        input = StringIO('foobar\n!VIDEO '
-                         '"http://www.youtube.com/embed/7aEYoP5-duY"\n')
-        result = ('foobar\n'
-                  '[![Link to Youtube video](images/youtube/7aEYoP5-duY.png)]'
-                  '(http://www.youtube.com/watch?v=7aEYoP5-duY)\n')
-
-        output = StringIO()
-        MarkdownPP(input=input, modules=['youtubeembed'], output=output)
-
-        output.seek(0)
-        self.assertEqual(output.read(), result)
-
-    def test_toc(self):
-        input = StringIO('\n# Document Title\n\n'
-                         '!TOC\n\n'
-                         '## Header 1\n'
-                         '### Header 1.a\n'
-                         '## Header 2\n')
-
-        result = """
-        # Document Title
-
-        1\.  [Header 1](#header1)
-        1.1\.  [Header 1.a](#header1.a)
-        2\.  [Header 2](#header2)
-
-        <a name="header1"></a>
-
-        ## 1\. Header 1
-        <a name="header1.a"></a>
-
-        ### 1.1\. Header 1.a
-        <a name="header2"></a>
-
-        ## 2\. Header 2"""
-
-        output = StringIO()
-        MarkdownPP(input=input, modules=['tableofcontents'], output=output)
-
-        output.seek(0)
-        self.assertEqual([l.strip() for l in output.readlines()],
-                         [l.strip() for l in result.split('\n')])
+    def test_tableofcontents(self):
+        self.assertEqual(*test_prototype('tableofcontents'))
 
     def test_reference(self):
-        input = StringIO('\n!REF\n\n[github]: http://github.com "GitHub"')
-        result = ('\n*\t[GitHub][github]\n\n[github]: '
-                  'http://github.com "GitHub"')
-
-        output = StringIO()
-        MarkdownPP(input=input, modules=['reference'], output=output)
-
-        output.seek(0)
-        self.assertEqual(output.read(), result)
+        self.assertEqual(*test_prototype('reference'))
 
     def test_latexrender(self):
         input = StringIO('$\displaystyle 1 + 1 = 2 $')
@@ -116,20 +71,6 @@ class MarkdownPPTests(unittest.TestCase):
         match = re.match(result_re, output_str)
         self.assertIsNotNone(match)
         self.assertEqual(match.span(), (0, len(output_str)))
-
-    def test_file(self):
-        with open('../readme.md', 'r') as md:
-            result = md.read()
-
-        with open('../readme.mdpp', 'r') as mdpp:
-            input = mdpp
-
-            output = StringIO()
-            modules = list(Modules.keys())
-            MarkdownPP(input=input, modules=modules, output=output)
-
-        output.seek(0)
-        self.assertEqual(output.read(), result)
 
     def test_include_shift(self):
         # test shift=1
@@ -169,11 +110,11 @@ class MarkdownPPTests(unittest.TestCase):
             subprocess.call(['markdown-pp', 'datafiles/test_script.mdpp', '-o',
                             temp_outfile.name])
 
-            with open('datafiles/test_script.txt', 'r') as target_outfile:
-                target_out = target_outfile.read()
+            with open('datafiles/test_script_target.md', 'r') as targetfile:
+                target = targetfile.read()
 
             temp_outfile.seek(0)
-            self.assertEqual(target_out, temp_outfile.read().decode('utf-8'))
+            self.assertEqual(target, temp_outfile.read().decode('utf-8'))
 
 
 if __name__ == '__main__':
