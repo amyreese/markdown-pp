@@ -113,6 +113,16 @@ class MarkdownPPTests(unittest.TestCase):
         self.assertEqual(*read_both_files(make_outfile_name('script'),
                                           make_targetfile_name('script')))
 
+    def test_recursive(self):
+        subprocess.call(['markdown-pp', '.', '-r'])
+
+        module_list = ['include', 'includeurl', 'youtubeembed',
+                       'tableofcontents', 'reference', 'script', 'shift']
+        for module in module_list:
+            out, target = read_both_files(make_outfile_name(module),
+                                          make_targetfile_name(module))
+            self.assertEqual(out, target)
+
 
 if __name__ == '__main__':
     unittest.main()
