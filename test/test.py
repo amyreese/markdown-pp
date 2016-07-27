@@ -122,15 +122,11 @@ class MarkdownPPTests(unittest.TestCase):
 
     def test_script(self):
         # test the script without arguments
-        with NamedTemporaryFile(delete=False) as temp_outfile:
-            subprocess.call(['markdown-pp', 'datafiles/test_script.mdpp', '-o',
-                            temp_outfile.name])
+        subprocess.call(['markdown-pp', 'script/test_script.mdpp', '-o',
+                         'script/test_script.md'])
 
-            with open('datafiles/test_script_target.md', 'r') as targetfile:
-                target = targetfile.read()
-
-            temp_outfile.seek(0)
-            self.assertEqual(target, temp_outfile.read().decode('utf-8'))
+        self.assertEqual(*read_both_files(make_outfile_name('script'),
+                                          make_targetfile_name('script')))
 
 
 if __name__ == '__main__':
