@@ -7,7 +7,7 @@ from __future__ import unicode_literals
 
 import re
 import os
-import urllib
+import logging
 
 from MarkdownPP.Module import Module
 from MarkdownPP.Transform import Transform
@@ -50,39 +50,21 @@ class YoutubeEmbed(Module):
                     image_url = 'http://img.youtube.com/vi/%s/0.jpg' % url
                     video_url = 'http://www.youtube.com/watch?v=%s' % url
                     processed_image_dir = os.path.join('images', 'youtube')
+
+                    # create directories if needed
+                    if not os.path.exists(processed_image_dir):
+                        os.makedirs(processed_image_dir)
+
                     processed_image_path = os.path.join(processed_image_dir,
                                                         '%s.png' % url)
 
                     # do we already have a screenshot?
                     if not os.path.isfile(processed_image_path):
-                        # try to add a play button to the screenshot
-                        try:
-                            import Image
-                            from tempfile import NamedTemporaryFile
+                        # create directories if needed
+                        if not os.path.exists(processed_image_dir):
+                            os.makedirs(processed_image_dir)
 
-                            # create directories if needed
-                            if not os.path.exists(processed_image_dir):
-                                os.makedirs(processed_image_dir)
-
-                            # create temporary files for image operations
-                            screenshot_img = NamedTemporaryFile(suffix=".jpg")
-                            button_img = NamedTemporaryFile(suffix=".png")
-
-                            # grab screenshot and button image
-                            urllib.urlretrieve(image_url, screenshot_img.name)
-                            urllib.urlretrieve(play_button_url,
-                                               button_img.name)
-
-                            # layer the images using PIL and save
-                            background = Image.open(screenshot_img.name)
-                            foreground = Image.open(button_img.name)
-                            background.paste(foreground, (90, 65), foreground)
-                            background.save(processed_image_path)
-
-                        except Exception as e:
-                            print('Unable to add play button to YouTube '
-                                  'screenshot (%s). Using the screenshot '
-                                  'on its own instead.' % e)
+                        self._add_play_button(image_url, processed_image_path)
 
                     image_link = ('[![Link to Youtube video](%s)](%s)\n' %
                                   (processed_image_path, video_url))
@@ -91,3 +73,35 @@ class YoutubeEmbed(Module):
             linenum += 1
 
         return transforms
+
+    def _add_play_button(self, image_url, image_path):
+        """Try to add a play button to the screenshot."""
+        try:
+            from PIL import Image
+            from tempfile import NamedTemporaryFile
+            import urllib
+            try:
+                urlretrieve = urllib.request.urlretrieve
+            except:
+                urlretrieve = urllib.urlretrieve
+
+            # create temporary files for image operations
+            with NamedTemporaryFile(suffix=".jpg") as screenshot_img:
+                with NamedTemporaryFile(suffix=".jpg") as button_img:
+                    # grab screenshot and button image
+                    urlretrieve(image_url, screenshot_img.name)
+                    urlretrieve(play_button_url, button_img.name)
+
+                    # layer the images using PIL and save
+                    with Image.open(screenshot_img.name) as background:
+                        with Image.open(button_img.name) as foreground:
+                            background.paste(foreground, (90, 65), foreground)
+                            background.save(image_path)
+
+        except ImportError as e:
+            logging.error(e)
+
+        except Exception as e:
+            logging.warning('Unable to add play button to YouTube '
+                            'screenshot (%s). Using the screenshot '
+                            'on its own instead.' % e)
