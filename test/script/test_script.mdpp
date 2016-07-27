@@ -17,12 +17,12 @@
 
 
 # Test shift 1
-!INCLUDE "datafiles/test_shift.mdpp", 1
+!INCLUDE "shift/test_shift.mdpp", 1
 
 
 # Test shift 2
 
-!INCLUDE "datafiles/test_shift.mdpp", 2
+!INCLUDE "shift/test_shift.mdpp", 2
 
 
 # Test reference list

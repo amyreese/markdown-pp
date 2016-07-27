@@ -90,8 +90,8 @@ class MarkdownPPTests(unittest.TestCase):
 
     def test_include_shift(self):
         # test shift=1
-        input = StringIO('!INCLUDE "datafiles/test_shift.mdpp", 1\n')
-        with open('datafiles/test_shift.md', 'r') as resfile:
+        input = StringIO('!INCLUDE "shift/test_shift.mdpp", 1\n')
+        with open('shift/test_shift_target.md', 'r') as resfile:
             result = resfile.read()
 
         output = StringIO()
@@ -110,7 +110,7 @@ class MarkdownPPTests(unittest.TestCase):
         output1 = StringIO()
         MarkdownPP(input=input1, modules=['include'], output=output1)
 
-        input2 = StringIO('!INCLUDE "datafiles/test_shift.mdpp", 2\n')
+        input2 = StringIO('!INCLUDE "shift/test_shift.mdpp", 2\n')
         output2 = StringIO()
         MarkdownPP(input=input2, modules=['include'], output=output2)
 
