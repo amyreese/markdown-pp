@@ -5,11 +5,11 @@
 
 
 # Test include
-!INCLUDE "datafiles/test_include.md"
+!INCLUDE "script/include_me.md"
 
 
 # Test include url
-!INCLUDEURL "file:datafiles/test_include.md"
+!INCLUDEURL "file:script/include_me.md"
 
 
 # Test youtube embed
