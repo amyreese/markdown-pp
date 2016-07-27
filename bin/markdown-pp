@@ -13,6 +13,7 @@ import MarkdownPP
 
 import os
 import time
+import logging
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 
@@ -39,11 +40,9 @@ class MarkdownPPFileEventHandler(PatternMatchingEventHandler):
         MarkdownPP.MarkdownPP(input=mdpp, output=md, modules=modules)
 
         # Logs time and file changed (with colors!)
-        print(time.strftime("%c") + ":",
-              colors.MAGB + event.src_path,
-              colors.GREEN + event.event_type,
-              "and processed with MarkdownPP",
-              colors.NORMAL)
+        logging.info("%s: %s%s %s%s and processed with MarkdownPP%s",
+                     time.strftime("%c"), colors.MAGB, event.src_path,
+                     colors.GREEN, event.event_type, colors.NORMAL)
 
     def on_modified(self, event):
         self.process(event)
@@ -54,8 +53,8 @@ class MarkdownPPFileEventHandler(PatternMatchingEventHandler):
 
 if __name__ == '__main__':
     # setup command line arguments
-    parser = argparse.ArgumentParser(description='Preprocessor for Markdown'
-                                     ' files.')
+    parser = argparse.ArgumentParser(description='Preprocessor for '
+                                     'Markdown files.')
 
     parser.add_argument('FILENAME', help='Input file name (or directory if '
                         'watching)')
@@ -65,13 +64,28 @@ if __name__ == '__main__':
                         'current directory and subdirectories for changing '
                         '.mdpp files and process in local directory. File '
                         'output name is same as file input name.')
-
-    parser.add_argument('-o', '--output', help='Output file name. If no '
-                        'output file is specified, writes output to stdout.')
-    parser.add_argument('-e', '--exclude', help='List of modules to '
-                        'exclude, separated by commas. Available modules: '
+    parser.add_argument('-o', '--output', help='Output file name. '
+                        'If no output file is specified, writes output to '
+                        'stdout.')
+    parser.add_argument('-e', '--exclude', help='List of modules to exclude, '
+                        'separated by commas. Available modules: '
                         ', '.join(MarkdownPP.modules.keys()))
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help='Show all messages.')
+    parser.add_argument('-D', '--debug', action='store_true',
+                        help='Show all messages, including debug messages.')
     args = parser.parse_args()
+
+    # set logging level
+    if args.debug:
+        numeric_level = getattr(logging, 'DEBUG', None)
+    elif args.verbose:
+        numeric_level = getattr(logging, 'INFO', None)
+    else:
+        numeric_level = getattr(logging, 'WARNING', None)
+
+    logging.basicConfig(level=numeric_level,
+                        format='%(levelname)s:%(filename)s:%(message)s')
 
     # If watch flag is on, watch dirs instead of processing individual file
     if args.watch:
@@ -102,14 +116,14 @@ if __name__ == '__main__':
 
         modules = MarkdownPP.modules.keys()
 
-        if args.exclude:
-            for module in args.exclude.split(','):
-                if module in modules:
-                    modules.remove(module)
-                else:
-                    print('Cannot exclude ', module, ' - no such module')
+    if args.exclude:
+        for module in args.exclude.split(','):
+            if module in modules:
+                modules.remove(module)
+            else:
+                logging.warning('Cannot exclude %s - no such module', module)
 
-        MarkdownPP.MarkdownPP(input=mdpp, output=md, modules=modules)
+    MarkdownPP.MarkdownPP(input=mdpp, output=md, modules=modules)
 
-        mdpp.close()
-        md.close()
+    mdpp.close()
+    md.close()

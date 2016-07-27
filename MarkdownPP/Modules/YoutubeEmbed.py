@@ -7,6 +7,7 @@ from __future__ import unicode_literals
 
 import re
 import os
+import logging
 
 from MarkdownPP.Module import Module
 from MarkdownPP.Transform import Transform
@@ -49,6 +50,11 @@ class YoutubeEmbed(Module):
                     image_url = 'http://img.youtube.com/vi/%s/0.jpg' % url
                     video_url = 'http://www.youtube.com/watch?v=%s' % url
                     processed_image_dir = os.path.join('images', 'youtube')
+
+                    # create directories if needed
+                    if not os.path.exists(processed_image_dir):
+                        os.makedirs(processed_image_dir)
+
                     processed_image_path = os.path.join(processed_image_dir,
                                                         '%s.png' % url)
 
@@ -93,9 +99,9 @@ class YoutubeEmbed(Module):
                             background.save(image_path)
 
         except ImportError as e:
-            print(e)
+            logging.error(e)
 
         except Exception as e:
-            print('Unable to add play button to YouTube '
-                  'screenshot (%s). Using the screenshot '
-                  'on its own instead.' % e)
+            logging.warning('Unable to add play button to YouTube '
+                            'screenshot (%s). Using the screenshot '
+                            'on its own instead.' % e)
