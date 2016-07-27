@@ -110,11 +110,11 @@ class MarkdownPPTests(unittest.TestCase):
             subprocess.call(['markdown-pp', 'datafiles/test_script.mdpp', '-o',
                             temp_outfile.name])
 
-            with open('datafiles/test_script.txt', 'r') as target_outfile:
-                target_out = target_outfile.read()
+            with open('datafiles/test_script_target.md', 'r') as targetfile:
+                target = targetfile.read()
 
             temp_outfile.seek(0)
-            self.assertEqual(target_out, temp_outfile.read().decode('utf-8'))
+            self.assertEqual(target, temp_outfile.read().decode('utf-8'))
 
 
 if __name__ == '__main__':
