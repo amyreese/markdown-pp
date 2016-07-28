@@ -82,7 +82,7 @@ class YoutubeEmbed(Module):
             import urllib
             try:
                 urlretrieve = urllib.request.urlretrieve
-            except:
+            except ImportError:
                 urlretrieve = urllib.urlretrieve
 
             # create temporary files for image operations
