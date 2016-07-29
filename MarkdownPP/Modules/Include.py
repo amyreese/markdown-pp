@@ -90,7 +90,7 @@ class Include(Module):
 
             return data
 
-        except (IOError, OSError) as exc:
-            logging.warning(exc)
+        except (IOError, OSError):
+            logging.exception()
 
         return []
