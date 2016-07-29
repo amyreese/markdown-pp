@@ -6,6 +6,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import re
+import logging
 from os import path
 
 from MarkdownPP.Module import Module
@@ -89,7 +90,7 @@ class Include(Module):
 
             return data
 
-        except (IOError, OSError) as exc:
-            print(exc)
+        except (IOError, OSError):
+            logging.exception()
 
         return []
