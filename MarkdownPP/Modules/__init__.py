@@ -23,4 +23,5 @@ def load_modules():
                 nickname = modulename.lower()
                 modules[nickname] = module.__dict__[modulename]
 
+
 load_modules()
