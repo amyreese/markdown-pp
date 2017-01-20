@@ -100,7 +100,7 @@ def main():
         else:
             md = sys.stdout
 
-        modules = MarkdownPP.modules.keys()
+        modules = list(MarkdownPP.modules)
 
         if args.exclude:
             for module in args.exclude.split(','):
