@@ -30,11 +30,10 @@ setup(
         'Development Status :: 4 - Beta',
     ],
     license='MIT License',
-    # scripts=['bin/markdown-pp'],
     packages=['MarkdownPP', 'MarkdownPP/Modules'],
     entry_points={
         'console_scripts': [
-            'markdown-pp = bin.markdown_pp:main'
+            'markdown-pp = MarkdownPP.main:main'
         ],
     },
     install_requires=[
