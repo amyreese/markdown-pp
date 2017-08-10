@@ -70,7 +70,7 @@ def main():
                         'output file is specified, writes output to stdout.')
     parser.add_argument('-e', '--exclude', help='List of modules to '
                         'exclude, separated by commas. Available modules: '
-                        ', '.join(MarkdownPP.modules.keys()))
+                        + ', '.join(MarkdownPP.modules.keys()))
     args = parser.parse_args()
 
     # If watch flag is on, watch dirs instead of processing individual file
