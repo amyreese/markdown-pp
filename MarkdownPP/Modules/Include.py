@@ -26,6 +26,9 @@ class Include(Module):
     # matches title lines in Markdown files
     titlere = re.compile(r"^(:?#+.*|={3,}|-{3,})$")
 
+    # matches header delimiters which are used to define variables
+    headre = re.compile(r"^(-{3,})$")
+
     # includes should happen before anything else
     priority = 0
 
@@ -61,6 +64,21 @@ class Include(Module):
             data = f.readlines()
             f.close()
 
+            title=None
+            if self.headre.match(data[0]):
+                # this is the first delimiter of a variable definition section
+                i=1
+                while i < len(data) and not self.headre.match(data[i]):
+                    # take in account variable definitions
+                    # the most noticeable being `title:`
+                    t=re.match(r"title:\s*(.*)", data[i])
+                    if t:
+                        title=t.group(1)
+                    i+=1
+
+                data=data[i+1:] # forget header lines
+                if title: # prepend a title if any
+                    data=["# "+title]+data
             # line by line, apply shift and recursively include file data
             linenum = 0
             for line in data:
