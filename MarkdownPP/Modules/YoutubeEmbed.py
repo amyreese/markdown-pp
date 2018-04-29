@@ -12,7 +12,7 @@ from MarkdownPP.Module import Module
 from MarkdownPP.Transform import Transform
 
 youtube_url_re = re.compile('^!VIDEO\s+"https?://www\.youtube\.com'
-                            '/embed/([a-zA-Z0-9\-]*)"')
+                            '/embed/([a-zA-Z0-9_\-]*)"')
 glowfoto_server_re = re.compile("<uploadform>(.*)</uploadform>")
 glowfoto_image_re = re.compile("<thumburl>(.*)</thumburl>")
 codere = re.compile("^(    |\t)")
