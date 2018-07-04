@@ -60,7 +60,7 @@ class IncludeCode(Include):
             return (
                 "```" + (str(lang) if lang is not None else "") + "\n"
                 + "".join(self._select_lines(code_data, lines))
-                + "```\n"
+                + "\n```\n"
             )
 
         except (IOError, OSError) as exc:
