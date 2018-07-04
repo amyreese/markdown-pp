@@ -1,3 +1,5 @@
+.PHONY: build dev upload lint test clean
+
 readme.md: readme.mdpp
 	markdown-pp readme.mdpp -o readme.md
 
@@ -11,7 +13,7 @@ upload: readme.md
 	python setup.py sdist upload
 
 lint:
-	flake8 --show-source .
+	flake8 --show-source MarkdownPP
 
 test: lint
 	markdown-pp readme.mdpp -o readme.test && diff -u readme.md readme.test

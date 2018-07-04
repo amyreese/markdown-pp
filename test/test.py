@@ -168,13 +168,120 @@ class MarkdownPPTests(unittest.TestCase):
         # test the script without arguments
         with NamedTemporaryFile(delete=False) as temp_outfile:
             subprocess.call(['markdown-pp', 'datafiles/test_script.mdpp', '-o',
-                            temp_outfile.name])
+                             temp_outfile.name])
 
             with open('datafiles/test_script.txt', 'r') as target_outfile:
                 target_out = target_outfile.read()
 
             temp_outfile.seek(0)
             self.assertEqual(target_out, temp_outfile.read().decode('utf-8'))
+
+    def test_include_code(self):
+        input = StringIO('foo\n!INCLUDECODE "datafiles/test_include_code.py"\nbar')
+        result = """foo
+```
+def main():
+    print "Hello World"
+
+
+if __name__ == '__main__':
+    main()
+```
+bar"""
+        output = StringIO()
+        MarkdownPP(input=input, modules=['includecode'], output=output)
+
+        output.seek(0)
+        self.assertEqual(output.read(), result)
+
+    def test_include_code_single_line(self):
+        input = StringIO('foo\n!INCLUDECODE "datafiles/test_include_code.py",1\nbar')
+        result = """foo
+```
+def main():
+```
+bar"""
+        output = StringIO()
+        MarkdownPP(input=input, modules=['includecode'], output=output)
+
+        output.seek(0)
+        self.assertEqual(output.read(), result)
+
+    def test_include_code_multiline_1(self):
+        input = StringIO('foo\n!INCLUDECODE "datafiles/test_include_code.py",5:\nbar')
+        result = """foo
+```
+if __name__ == '__main__':
+    main()
+```
+bar"""
+        output = StringIO()
+        MarkdownPP(input=input, modules=['includecode'], output=output)
+
+        output.seek(0)
+        self.assertEqual(output.read(), result)
+
+    def test_include_code_multiline_2(self):
+        input = StringIO('foo\n!INCLUDECODE "datafiles/test_include_code.py",5:5\nbar')
+        result = """foo
+```
+if __name__ == '__main__':
+```
+bar"""
+        output = StringIO()
+        MarkdownPP(input=input, modules=['includecode'], output=output)
+
+        output.seek(0)
+        self.assertEqual(output.read(), result)
+
+    def test_include_code_multiline_3(self):
+        input = StringIO('foo\n!INCLUDECODE "datafiles/test_include_code.py",:3\nbar')
+        result = """foo
+```
+def main():
+    print "Hello World"
+
+```
+bar"""
+        output = StringIO()
+        MarkdownPP(input=input, modules=['includecode'], output=output)
+
+        output.seek(0)
+        self.assertEqual(output.read(), result)
+
+    def test_include_code_lang(self):
+        input = StringIO('foo\n!INCLUDECODE "datafiles/test_include_code.py"(python)\nbar')
+        result = """foo
+```python
+def main():
+    print "Hello World"
+
+
+if __name__ == '__main__':
+    main()
+```
+bar"""
+        output = StringIO()
+        MarkdownPP(input=input, modules=['includecode'], output=output)
+
+        output.seek(0)
+        self.assertEqual(output.read(), result)
+
+    def test_include_code_lang_with_multiline(self):
+        input = StringIO('foo\n!INCLUDECODE "datafiles/test_include_code.py"(python),1:3\nbar')
+        result = """foo
+```python
+def main():
+    print "Hello World"
+
+```
+bar"""
+        output = StringIO()
+        MarkdownPP(input=input, modules=['includecode'], output=output)
+
+        output.seek(0)
+        self.assertEqual(output.read(), result)
+
 
 
 if __name__ == '__main__':
