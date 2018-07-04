@@ -133,6 +133,64 @@ Compiling `index.mdpp` with the IncludeURL module will produce the following:
     Hello
     Remote World!
 
+### IncludeCode
+
+Facilitates the inclusion of local code files. GFM fences will be added
+around the included code.
+
+Local code file `hello.py`:
+
+    def main():
+        print "Hello World"
+
+
+    if __name__ == '__main__':
+        main()
+
+
+Local file `index.mdpp`:
+
+    # My Code
+
+    !INCLUDECODE "hello.py"
+    Easy as that!
+
+Compiling `index.mdpp` with IncludeCode module wil produce the following:
+
+    # My Code
+
+    ```
+    def main():
+        print "Hello World"
+
+
+    if __name__ == '__main__':
+        main()
+    ```
+    Easy as that!
+
+Furthermore the IncludeCode module supports line extraction and language
+specification. The line extraction is like python list slicing (e.g. 3:6; lines
+three to six). Please note that line counting starts at one, not at zero.
+
+Local file `index.mdpp`:
+
+    # My Code
+
+    !INCLUDECODE "hello.py" (python), 1:2
+    Easy as that!
+
+Compiling `index.mdpp` with IncludeCode module wil produce the following:
+
+    # My Code
+
+    ```python
+    def main():
+        print "Hello World"
+    ```
+    Easy as that!
+
+
 ### Table of Contents
 
 The biggest feature provided by MarkdownPP is the generation of a table of

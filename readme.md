@@ -25,10 +25,11 @@ and process that document when viewing the repository.
 2\.  [Modules](#modules)  
 2.1\.  [Includes](#includes)  
 2.2\.  [IncludeURLs](#includeurls)  
-2.3\.  [Table of Contents](#tableofcontents)  
-2.4\.  [Reference](#reference)  
-2.5\.  [LaTeX Rendering](#latexrendering)  
-2.6\.  [YouTube Embeds](#youtubeembeds)  
+2.3\.  [IncludeCode](#includecode)  
+2.4\.  [Table of Contents](#tableofcontents)  
+2.5\.  [Reference](#reference)  
+2.6\.  [LaTeX Rendering](#latexrendering)  
+2.7\.  [YouTube Embeds](#youtubeembeds)  
 3\.  [Examples](#examples)  
 4\.  [Support](#support)  
 5\.  [References](#references)  
@@ -151,9 +152,69 @@ Compiling `index.mdpp` with the IncludeURL module will produce the following:
     Hello
     Remote World!
 
+<a name="includecode"></a>
+
+### 2.3\. IncludeCode
+
+Facilitates the inclusion of local code files. GFM fences will be added
+around the included code.
+
+Local code file `hello.py`:
+
+    def main():
+        print "Hello World"
+
+
+    if __name__ == '__main__':
+        main()
+
+
+Local file `index.mdpp`:
+
+    # My Code
+
+    !INCLUDECODE "hello.py"
+    Easy as that!
+
+Compiling `index.mdpp` with IncludeCode module wil produce the following:
+
+    # My Code
+
+    ```
+    def main():
+        print "Hello World"
+
+
+    if __name__ == '__main__':
+        main()
+    ```
+    Easy as that!
+
+Furthermore the IncludeCode module supports line extraction and language
+specification. The line extraction is like python list slicing (e.g. 3:6; lines
+three to six). Please note that line counting starts at one, not at zero.
+
+Local file `index.mdpp`:
+
+    # My Code
+
+    !INCLUDECODE "hello.py" (python), 1:2
+    Easy as that!
+
+Compiling `index.mdpp` with IncludeCode module wil produce the following:
+
+    # My Code
+
+    ```python
+    def main():
+        print "Hello World"
+    ```
+    Easy as that!
+
+
 <a name="tableofcontents"></a>
 
-### 2.3\. Table of Contents
+### 2.4\. Table of Contents
 
 The biggest feature provided by MarkdownPP is the generation of a table of
 contents for a document, with each item linked to the appropriate section of the
@@ -164,7 +225,7 @@ heading tag that Markdown would generate.
 
 <a name="reference"></a>
 
-### 2.4\. Reference
+### 2.5\. Reference
 
 Similarly, MarkdownPP can generate a list of references that follow Markdown's
 alternate link syntax, eg `[name]: <url> "Title"`.  A list of links will be
@@ -175,7 +236,7 @@ the document to be included in the list.
 
 <a name="latexrendering"></a>
 
-### 2.5\. LaTeX Rendering
+### 2.6\. LaTeX Rendering
 
 Lines and blocks of lines beginning and ending with $ are rendered as LaTeX,
 using [QuickLaTeX](http://www.holoborodko.com/pavel/quicklatex/).
@@ -191,7 +252,7 @@ becomes
 
 <a name="youtubeembeds"></a>
 
-### 2.6\. YouTube Embeds
+### 2.7\. YouTube Embeds
 
 As GitHub-flavored Markdown does not allow embed tags, each line of the form
 `!VIDEO "[youtube url]"` is converted into a screenshot that links to the video,
