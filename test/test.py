@@ -186,6 +186,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 ```
 bar"""
         output = StringIO()
@@ -199,6 +200,7 @@ bar"""
         result = """foo
 ```
 def main():
+
 ```
 bar"""
         output = StringIO()
@@ -213,6 +215,7 @@ bar"""
 ```
 if __name__ == '__main__':
     main()
+
 ```
 bar"""
         output = StringIO()
@@ -226,6 +229,7 @@ bar"""
         result = """foo
 ```
 if __name__ == '__main__':
+
 ```
 bar"""
         output = StringIO()
@@ -240,6 +244,7 @@ bar"""
 ```
 def main():
     print "Hello World"
+
 
 ```
 bar"""
@@ -259,6 +264,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 ```
 bar"""
         output = StringIO()
@@ -273,6 +279,7 @@ bar"""
 ```python
 def main():
     print "Hello World"
+
 
 ```
 bar"""
