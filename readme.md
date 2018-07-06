@@ -201,7 +201,7 @@ Local file `index.mdpp`:
     !INCLUDECODE "hello.py" (python), 1:2
     Easy as that!
 
-Compiling `index.mdpp` with IncludeCode module wil produce the following:
+Compiling `index.mdpp` with IncludeCode module will produce the following:
 
     # My Code
 
