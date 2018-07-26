@@ -195,6 +195,29 @@ bar"""
         output.seek(0)
         self.assertEqual(output.read(), result)
 
+    def test_include_code_lines(self):
+        input = StringIO('foo\n!INCLUDECODE "datafiles/test_include_code_2.py" (python), 1:10\nbar')
+        result = """foo
+```python
+def main():
+    print "Hello World"
+
+
+
+
+
+
+if __name__ == '__main__':
+    main()
+
+```
+bar"""
+        output = StringIO()
+        MarkdownPP(input=input, modules=['includecode'], output=output)
+
+        output.seek(0)
+        self.assertEqual(output.read(), result)
+
     def test_include_code_single_line(self):
         input = StringIO('foo\n!INCLUDECODE "datafiles/test_include_code.py",1\nbar')
         result = """foo

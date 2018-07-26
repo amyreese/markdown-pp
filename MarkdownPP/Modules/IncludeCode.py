@@ -22,7 +22,7 @@ class IncludeCode(Include):
 
     includere = re.compile(r"^!INCLUDECODE\s+(?:\"([^\"]+)\"|'([^']+)')"
                            r"(?:\s*\(\s*(.*)\s*\)\s*)?"
-                           r"\s*(?:,\s*(\d|(\d?:\d?)))?\s*$")
+                           r"\s*(?:,\s*(\d+|(\d*:\d*)))?\s*$")
 
     # include code should happen after includes, but before everything else
     priority = 0.1
