@@ -68,6 +68,8 @@ class Include(Module):
                 if match:
                     dirname = path.dirname(filename)
                     data[linenum:linenum+1] = self.include(match, dirname)
+                    # Update line so that we won't miss a shift if heading is on the 1st line
+                    line = data[linenum]
 
                 if shift:
 
