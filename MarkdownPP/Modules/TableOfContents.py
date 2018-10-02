@@ -13,7 +13,7 @@ from MarkdownPP.Transform import Transform
 tocre = re.compile("^!TOC(\s+[1-6])?\s*$")
 atxre = re.compile("^(#+)\s*(.+)$")
 setextre = re.compile("^(=+|-+)\s*$")
-fencedcodere = re.compile("^```\w*$")
+fencedcodere = re.compile("^```[ \w]*$")
 linkre = re.compile("(\[(.*?)\][\(\[].*?[\)\]])")
 
 

@@ -91,6 +91,33 @@ class MarkdownPPTests(unittest.TestCase):
         self.assertEqual([l.strip() for l in output.readlines()],
                          [l.strip() for l in result.split('\n')])
 
+    def test_toc_with_code_block(self):
+        input = StringIO(
+            '!TOC\n'
+            '# Header 1\n'
+            '```\n'
+            'code block\n'
+            '``` \n'
+            '# Header 2\n')
+
+        result = """1\.  [Header 1](#header1)
+        2\.  [Header 2](#header2)
+        <a name="header1"></a>
+
+        # 1\. Header 1
+        ```
+        code block
+        ```
+        <a name="header2"></a>
+        
+        # 2\. Header 2"""
+
+        output = StringIO()
+        MarkdownPP(input=input, modules=['tableofcontents'], output=output)
+        output.seek(0)
+        self.assertEqual([l.strip() for l in output.readlines()],
+                         [l.strip() for l in result.split('\n')])
+
     def test_reference(self):
         input = StringIO('\n!REF\n\n[github]: http://github.com "GitHub"')
         result = ('\n*\t[GitHub][github]\n\n[github]: '
