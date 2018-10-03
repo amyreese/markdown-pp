@@ -5,6 +5,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import glob
 import re
 from os import path
 
@@ -49,48 +50,52 @@ class Include(Module):
     def include(self, match, pwd=""):
         # file name is caught in group 1 if it's written with double quotes,
         # or group 2 if written with single quotes
-        filename = match.group(1) or match.group(2)
+        fileglob = match.group(1) or match.group(2)
 
         shift = int(match.group(3) or 0)
 
-        if not path.isabs(filename):
-            filename = path.join(pwd, filename)
-
+        result = []
         try:
-            f = open(filename, "r")
-            data = f.readlines()
-            f.close()
+            for filename in glob.glob(fileglob):
+                if not path.isabs(filename):
+                    filename = path.join(pwd, filename)
 
-            # line by line, apply shift and recursively include file data
-            linenum = 0
-            for line in data:
-                match = self.includere.search(line)
-                if match:
-                    dirname = path.dirname(filename)
-                    data[linenum:linenum+1] = self.include(match, dirname)
-                    # Update line so that we won't miss a shift if
-                    # heading is on the 1st line.
-                    line = data[linenum]
+                f = open(filename, "r")
+                data = f.readlines()
+                f.close()
 
-                if shift:
+                # line by line, apply shift and recursively include file data
+                linenum = 0
+                for line in data:
+                    match = self.includere.search(line)
+                    if match:
+                        dirname = path.dirname(filename)
+                        data[linenum:linenum+1] = self.include(match, dirname)
+                        # Update line so that we won't miss a shift if
+                        # heading is on the 1st line.
+                        line = data[linenum]
 
-                    titlematch = self.titlere.search(line)
-                    if titlematch:
-                        to_del = []
-                        for _ in range(shift):
-                            if data[linenum][0] == '#':
-                                data[linenum] = "#" + data[linenum]
-                            elif data[linenum][0] == '=':
-                                data[linenum] = data[linenum].replace("=", '-')
-                            elif data[linenum][0] == '-':
-                                data[linenum] = '### ' + data[linenum - 1]
-                                to_del.append(linenum - 1)
-                        for l in to_del:
-                            del data[l]
+                    if shift:
 
-                linenum += 1
+                        titlematch = self.titlere.search(line)
+                        if titlematch:
+                            to_del = []
+                            for _ in range(shift):
+                                if data[linenum][0] == '#':
+                                    data[linenum] = "#" + data[linenum]
+                                elif data[linenum][0] == '=':
+                                    data[linenum] = data[linenum].replace("=", '-')
+                                elif data[linenum][0] == '-':
+                                    data[linenum] = '### ' + data[linenum - 1]
+                                    to_del.append(linenum - 1)
+                            for l in to_del:
+                                del data[l]
 
-            return data
+                    linenum += 1
+
+                result += data
+
+            return result
 
         except (IOError, OSError) as exc:
             print(exc)
