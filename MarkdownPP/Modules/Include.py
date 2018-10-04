@@ -47,6 +47,51 @@ class Include(Module):
 
         return transforms
 
+    def include_file(self, filename, pwd="", shift=0):
+        try:
+            if not path.isabs(filename):
+                filename = path.join(pwd, filename)
+
+            f = open(filename, "r")
+            data = f.readlines()
+            f.close()
+
+            # line by line, apply shift and recursively include file data
+            linenum = 0
+            for line in data:
+                match = self.includere.search(line)
+                if match:
+                    dirname = path.dirname(filename)
+                    data[linenum:linenum+1] = self.include(match, dirname)
+                    # Update line so that we won't miss a shift if
+                    # heading is on the 1st line.
+                    line = data[linenum]
+
+                if shift:
+
+                    titlematch = self.titlere.search(line)
+                    if titlematch:
+                        to_del = []
+                        for _ in range(shift):
+                            if data[linenum][0] == '#':
+                                data[linenum] = "#" + data[linenum]
+                            elif data[linenum][0] == '=':
+                                data[linenum] = data[linenum].replace("=", '-')
+                            elif data[linenum][0] == '-':
+                                data[linenum] = '### ' + data[linenum - 1]
+                                to_del.append(linenum - 1)
+                        for l in to_del:
+                            del data[l]
+
+                linenum += 1
+
+            return data
+
+        except (IOError, OSError) as exc:
+            print(exc)
+
+        return []
+
     def include(self, match, pwd=""):
         # file name is caught in group 1 if it's written with double quotes,
         # or group 2 if written with single quotes
@@ -55,49 +100,9 @@ class Include(Module):
         shift = int(match.group(3) or 0)
 
         result = []
-        try:
-            for filename in glob.glob(fileglob):
-                if not path.isabs(filename):
-                    filename = path.join(pwd, filename)
+        
+        for filename in glob.glob(fileglob):
+            result += self.include_file(filename, pwd, shift)
 
-                f = open(filename, "r")
-                data = f.readlines()
-                f.close()
+        return result
 
-                # line by line, apply shift and recursively include file data
-                linenum = 0
-                for line in data:
-                    match = self.includere.search(line)
-                    if match:
-                        dirname = path.dirname(filename)
-                        data[linenum:linenum+1] = self.include(match, dirname)
-                        # Update line so that we won't miss a shift if
-                        # heading is on the 1st line.
-                        line = data[linenum]
-
-                    if shift:
-
-                        titlematch = self.titlere.search(line)
-                        if titlematch:
-                            to_del = []
-                            for _ in range(shift):
-                                if data[linenum][0] == '#':
-                                    data[linenum] = "#" + data[linenum]
-                                elif data[linenum][0] == '=':
-                                    data[linenum] = data[linenum].replace("=", '-')
-                                elif data[linenum][0] == '-':
-                                    data[linenum] = '### ' + data[linenum - 1]
-                                    to_del.append(linenum - 1)
-                            for l in to_del:
-                                del data[l]
-
-                    linenum += 1
-
-                result += data
-
-            return result
-
-        except (IOError, OSError) as exc:
-            print(exc)
-
-        return []
