@@ -101,7 +101,7 @@ class Include(Module):
 
         result = []
 
-        for filename in glob.glob(fileglob):
+        for filename in sorted(glob.glob(fileglob)):
             result += self.include_file(filename, pwd, shift)
 
         return result
