@@ -100,9 +100,8 @@ class Include(Module):
         shift = int(match.group(3) or 0)
 
         result = []
-        
+
         for filename in glob.glob(fileglob):
             result += self.include_file(filename, pwd, shift)
 
         return result
-
