@@ -79,7 +79,7 @@ class TableOfContents(Module):
 
             # underlined headers
             match = setextre.search(line)
-            if match and not infencedcodeblock:
+            if match and not infencedcodeblock and lastline.strip():
                 depth = 1 if match.group(1)[0] == "=" else 2
                 title = lastline.strip()
                 headers[linenum-1] = (depth, title)
