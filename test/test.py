@@ -36,6 +36,26 @@ class MarkdownPPTests(unittest.TestCase):
         output.seek(0)
         self.assertEqual(output.read(), result)
 
+    def test_include_glob(self):
+        input = StringIO('foobar\n!INCLUDE "datafiles/test_*.md"\n')
+        result = """foobar
+This is a test.
+Title
+-----
+
+### Subtitle
+
+## Title
+### Subtitle
+#### Subsubtitle
+"""
+
+        output = StringIO()
+        MarkdownPP(input=input, modules=['include'], output=output)
+
+        output.seek(0)
+        self.assertEqual(output.read(), result)
+
     def test_include_url(self):
         input = StringIO('foobar\n!INCLUDEURL '
                          '"file:datafiles/test_include.md"\n')
