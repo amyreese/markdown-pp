@@ -13,7 +13,7 @@ from MarkdownPP.Transform import Transform
 tocre = re.compile("^!TOC(\s+[1-6])?\s*$")
 atxre = re.compile("^(#+)\s*(.+)$")
 setextre = re.compile("^(=+|-+)\s*$")
-fencedcodere = re.compile("^```\w*$")
+fencedcodere = re.compile("^```[ \w]*$")
 linkre = re.compile("(\[(.*?)\][\(\[].*?[\)\]])")
 
 
@@ -79,7 +79,7 @@ class TableOfContents(Module):
 
             # underlined headers
             match = setextre.search(line)
-            if match and not infencedcodeblock:
+            if match and not infencedcodeblock and lastline.strip():
                 depth = 1 if match.group(1)[0] == "=" else 2
                 title = lastline.strip()
                 headers[linenum-1] = (depth, title)

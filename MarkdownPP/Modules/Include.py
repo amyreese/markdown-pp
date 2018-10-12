@@ -5,6 +5,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import glob
 import re
 from os import path
 
@@ -46,17 +47,11 @@ class Include(Module):
 
         return transforms
 
-    def include(self, match, pwd=""):
-        # file name is caught in group 1 if it's written with double quotes,
-        # or group 2 if written with single quotes
-        filename = match.group(1) or match.group(2)
-
-        shift = int(match.group(3) or 0)
-
-        if not path.isabs(filename):
-            filename = path.join(pwd, filename)
-
+    def include_file(self, filename, pwd="", shift=0):
         try:
+            if not path.isabs(filename):
+                filename = path.join(pwd, filename)
+
             f = open(filename, "r")
             data = f.readlines()
             f.close()
@@ -96,3 +91,17 @@ class Include(Module):
             print(exc)
 
         return []
+
+    def include(self, match, pwd=""):
+        # file name is caught in group 1 if it's written with double quotes,
+        # or group 2 if written with single quotes
+        fileglob = match.group(1) or match.group(2)
+
+        shift = int(match.group(3) or 0)
+
+        result = []
+
+        for filename in sorted(glob.glob(fileglob)):
+            result += self.include_file(filename, pwd, shift)
+
+        return result
