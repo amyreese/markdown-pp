@@ -49,9 +49,6 @@ class Include(Module):
 
     def include_file(self, filename, pwd="", shift=0):
         try:
-            if not path.isabs(filename):
-                filename = path.join(pwd, filename)
-
             f = open(filename, "r")
             data = f.readlines()
             f.close()
@@ -100,8 +97,14 @@ class Include(Module):
         shift = int(match.group(3) or 0)
 
         result = []
+        if pwd != "":
+            fileglob = path.join(pwd, fileglob)
 
-        for filename in sorted(glob.glob(fileglob)):
-            result += self.include_file(filename, pwd, shift)
+        files = sorted(glob.glob(fileglob))
+        if len(files) > 0:
+            for filename in files:
+                result += self.include_file(filename, pwd, shift)
+        else:
+            result.append("")
 
         return result

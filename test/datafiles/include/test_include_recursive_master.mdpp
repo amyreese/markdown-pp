@@ -1,0 +1,3 @@
+!INCLUDE "test_include_recursive_1.mdpp", 0
+!INCLUDE "test_include_recursive_2.mdpp", 1
+!INCLUDE "*.md"
