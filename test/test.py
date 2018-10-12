@@ -56,6 +56,35 @@ Title
         output.seek(0)
         self.assertEqual(output.read(), result)
 
+    def test_empty_glob_should_not_lead_to_index_errors(self):
+        input = StringIO('!INCLUDE "datafiles/test_empty_glob.mdpp"\n')
+        result = '# Test Header\n'
+        output = StringIO()
+        MarkdownPP(input=input, modules=['include'], output=output)
+        output.seek(0)
+        self.assertEqual(output.read(), result)
+
+    def test_include_glob_recursive_relative_path(self):
+        """Tests if the include works with recursive files and relative
+        include path and globbing.
+        """
+        input = StringIO('yay\n!INCLUDE "datafiles/test_include_recursive.mdpp"')
+        result = """yay
+# Parent
+# File 1 Header
+
+File 1 text
+## File 2 Test
+
+File 2 Text
+File 00.md
+File 01.md
+"""
+        output = StringIO()
+        MarkdownPP(input=input, modules=['include'], output=output)
+        output.seek(0)
+        self.assertEqual(output.read(), result)
+
     def test_include_url(self):
         input = StringIO('foobar\n!INCLUDEURL '
                          '"file:datafiles/test_include.md"\n')
