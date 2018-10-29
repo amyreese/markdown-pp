@@ -12,7 +12,7 @@ if path.isfile('README.md'):
 setup(
     name='MarkdownPP',
     description='Markdown preprocessor',
-    version='1.5',
+    version='1.5.1',
     author='John Reese',
     author_email='john@noswap.com',
     url='https://github.com/jreese/markdown-pp',
