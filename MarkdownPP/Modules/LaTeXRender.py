@@ -19,15 +19,15 @@ from MarkdownPP.Module import Module
 from MarkdownPP.Transform import Transform
 
 # $...$ (or $$...$$)
-singlelinere = re.compile("\$(\$?)..*\$(\$?)")
+singlelinere = re.compile(r"\$(\$?)..*\$(\$?)")
 # $... or ...$ (or $$... or ...$$)
-startorendre = re.compile("^\$(\$?)|^\S.*\$(\$?)$")
+startorendre = re.compile(r"^\$(\$?)|^\S.*\$(\$?)$")
 
-codere = re.compile("^(    |\t)")
+codere = re.compile(r"^(    |\t)")
 spancodere = re.compile(r'(`[^`]+\`)')  # code between backticks
 
 # Support for Pandoc style code blocks with attributes
-fencedcodere = re.compile("^((> *)?```\w*|(> *)?~~~~*(\s*{.*})?)$")
+fencedcodere = re.compile(r"^((> *)?```\w*|(> *)?~~~~*(\s*{.*})?)$")
 
 
 class LaTeXRender(Module):

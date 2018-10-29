@@ -27,7 +27,7 @@ class IncludeURL(Include):
     Targets must be valid, absolute urls.
     """
 
-    includere = re.compile("^!INCLUDEURL\s+(?:\"([^\"]+)\"|'([^']+)')\s*$")
+    includere = re.compile(r"^!INCLUDEURL\s+(?:\"([^\"]+)\"|'([^']+)')\s*$")
 
     # include urls should happen after includes, but before everything else
     priority = 0.1

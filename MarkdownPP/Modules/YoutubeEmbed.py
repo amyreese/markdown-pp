@@ -11,12 +11,12 @@ import os
 from MarkdownPP.Module import Module
 from MarkdownPP.Transform import Transform
 
-youtube_url_re = re.compile('^!VIDEO\s+"https?://www\.youtube\.com'
-                            '/embed/([a-zA-Z0-9_\-]*)"')
-glowfoto_server_re = re.compile("<uploadform>(.*)</uploadform>")
-glowfoto_image_re = re.compile("<thumburl>(.*)</thumburl>")
-codere = re.compile("^(    |\t)")
-fencedcodere = re.compile("^```\w*$")
+youtube_url_re = re.compile(r'^!VIDEO\s+"https?://www\.youtube\.com'
+                            r'/embed/([a-zA-Z0-9_\-]*)"')
+glowfoto_server_re = re.compile(r"<uploadform>(.*)</uploadform>")
+glowfoto_image_re = re.compile(r"<thumburl>(.*)</thumburl>")
+codere = re.compile(r"^(    |\t)")
+fencedcodere = re.compile(r"^```\w*$")
 
 play_button_url = 'http://i.imgur.com/1IHylPh.png'
 

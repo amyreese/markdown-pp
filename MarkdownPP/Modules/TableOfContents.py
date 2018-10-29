@@ -10,11 +10,11 @@ import re
 from MarkdownPP.Module import Module
 from MarkdownPP.Transform import Transform
 
-tocre = re.compile("^!TOC(\s+[1-6])?\s*$")
-atxre = re.compile("^(#+)\s*(.+)$")
-setextre = re.compile("^(=+|-+)\s*$")
-fencedcodere = re.compile("^```[ \w]*$")
-linkre = re.compile("(\[(.*?)\][\(\[].*?[\)\]])")
+tocre = re.compile(r"^!TOC(\s+[1-6])?\s*$")
+atxre = re.compile(r"^(#+)\s*(.+)$")
+setextre = re.compile(r"^(=+|-+)\s*$")
+fencedcodere = re.compile(r"^```[ \w]*$")
+linkre = re.compile(r"(\[(.*?)\][\(\[].*?[\)\]])")
 
 
 class TableOfContents(Module):
@@ -115,7 +115,7 @@ class TableOfContents(Module):
 
             (depth, title) = headers[linenum]
             depth += depthoffset
-            short = re.sub("([\s,-,\(,\)]+)", "",
+            short = re.sub(r"([\s,-,\(,\)]+)", "",
                            TableOfContents.clean_title(title)).lower()
 
             if short in short_titles:

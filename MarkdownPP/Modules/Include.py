@@ -22,7 +22,7 @@ class Include(Module):
 
     # matches !INCLUDE directives in .mdpp files
     includere = re.compile(r"^!INCLUDE\s+(?:\"([^\"]+)\"|'([^']+)')"
-                           "\s*(?:,\s*(\d+))?\s*$")
+                           r"\s*(?:,\s*(\d+))?\s*$")
 
     # matches title lines in Markdown files
     titlere = re.compile(r"^(:?#+.*|={3,}|-{3,})$")

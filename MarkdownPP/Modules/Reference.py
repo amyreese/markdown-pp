@@ -10,8 +10,8 @@ import re
 from MarkdownPP.Module import Module
 from MarkdownPP.Transform import Transform
 
-refre = re.compile("^!REF\s*$")
-linkre = re.compile("^\[([^\]]+)\]:\s+(\S+)(?:\s*[\"'\(](.+)[\"'\(]\s*)?$")
+refre = re.compile(r"^!REF\s*$")
+linkre = re.compile(r"^\[([^\]]+)\]:\s+(\S+)(?:\s*[\"'\(](.+)[\"'\(]\s*)?$")
 
 
 class Reference(Module):
