@@ -76,9 +76,11 @@ class Include(Module):
                         to_del = []
                         for _ in range(shift):
                             # Skip underlines with empty above text
-                            # or underlines that are the first of an included file
-                            priortext = re.sub(self.formatre, '', data[linenum - 1].strip())
-                            isunderlined = priortext and linenum > includednum
+                            # or underlines that are the first line of an
+                            # included file
+                            prevtxt = re.sub(self.formatre, '',
+                                             data[linenum - 1]).strip()
+                            isunderlined = prevtxt and linenum > includednum
                             if data[linenum][0] == '#':
                                 data[linenum] = "#" + data[linenum]
                             elif data[linenum][0] == '=' and isunderlined:
