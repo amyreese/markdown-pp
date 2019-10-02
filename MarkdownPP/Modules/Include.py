@@ -27,6 +27,9 @@ class Include(Module):
     # matches title lines in Markdown files
     titlere = re.compile(r"^(:?#+.*|={3,}|-{3,})$")
 
+    # matches unescaped formatting characters such as ` or _
+    formatre = re.compile(r"[^\\]?[_*`]")
+
     # includes should happen before anything else
     priority = 0
 
@@ -55,11 +58,13 @@ class Include(Module):
 
             # line by line, apply shift and recursively include file data
             linenum = 0
+            includednum = 0
             for line in data:
                 match = self.includere.search(line)
                 if match:
                     dirname = path.dirname(filename)
                     data[linenum:linenum+1] = self.include(match, dirname)
+                    includednum = linenum
                     # Update line so that we won't miss a shift if
                     # heading is on the 1st line.
                     line = data[linenum]
@@ -70,11 +75,15 @@ class Include(Module):
                     if titlematch:
                         to_del = []
                         for _ in range(shift):
+                            # Skip underlines with empty above text
+                            # or underlines that are the first of an included file
+                            priortext = re.sub(self.formatre, '', data[linenum - 1].strip())
+                            isunderlined = priortext and linenum > includednum
                             if data[linenum][0] == '#':
                                 data[linenum] = "#" + data[linenum]
-                            elif data[linenum][0] == '=':
+                            elif data[linenum][0] == '=' and isunderlined:
                                 data[linenum] = data[linenum].replace("=", '-')
-                            elif data[linenum][0] == '-':
+                            elif data[linenum][0] == '-' and isunderlined:
                                 data[linenum] = '### ' + data[linenum - 1]
                                 to_del.append(linenum - 1)
                         for l in to_del:
