@@ -25,6 +25,19 @@ class TableOfContents(Module):
     """
 
     @staticmethod
+    def clean_html_string(string):
+        replacements = [
+            ("&", "&amp;"),
+            ("<", "&lt;"),
+            (">", "&gt;"),
+            ("\"", "&quot;"),
+            ("'", "&#39;"),
+        ]
+        for to_replace, with_what in replacements:
+            string = string.replace(to_replace, with_what)
+        return string
+
+    @staticmethod
     def clean_title(title):
         for link in re.findall(linkre, title):
             title = title.replace(link[0], link[1])
@@ -146,6 +159,9 @@ class TableOfContents(Module):
             else:
                 section = (".".join([str(x) for x in stack]) +
                            ".%d\\. " % headernum)
+
+            short = TableOfContents.clean_html_string(short)
+            title = TableOfContents.clean_html_string(title)
 
             tocdata += ("%s [%s](#%s)  \n" %
                         (section, TableOfContents.clean_title(title), short))
