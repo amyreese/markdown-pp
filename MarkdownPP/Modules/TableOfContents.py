@@ -24,6 +24,8 @@ class TableOfContents(Module):
     wherever a `!TOC` marker is found at the beginning of a line.
     """
 
+    tocre = re.compile(r"^!TOC\s*(?:\s*(\d+|(\d*:\d*)))?\s*$")
+
     @staticmethod
     def clean_html_string(string):
         replacements = [
@@ -163,8 +165,8 @@ class TableOfContents(Module):
             short = TableOfContents.clean_html_string(short)
             title = TableOfContents.clean_html_string(title)
 
-            tocdata += ("%s [%s](#%s)  \n" %
-                        (section, TableOfContents.clean_title(title), short))
+            tocdata += ("<div class=\"toc toc-%s\">\n\n%s [%s](#%s)\n</div>\n" %
+                        (depth,section, TableOfContents.clean_title(title), short))
 
             transforms.append(Transform(linenum, "swap",
                               data[linenum].replace(title, section + title)))
