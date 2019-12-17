@@ -165,8 +165,9 @@ class TableOfContents(Module):
             short = TableOfContents.clean_html_string(short)
             title = TableOfContents.clean_html_string(title)
 
-            tocdata += ("<div class=\"toc toc-%s\">\n\n%s [%s](#%s)\n</div>\n" %
-                        (depth,section, TableOfContents.clean_title(title), short))
+            tocdata += ("<div class=\"toc toc-%s\">\n\n%s [%s](#%s)\n</div>\n"
+                        % (depth, section, TableOfContents.clean_title(title),
+                            short))
 
             transforms.append(Transform(linenum, "swap",
                               data[linenum].replace(title, section + title)))

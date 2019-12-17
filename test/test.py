@@ -119,9 +119,18 @@ File 01.md
         result = """
         # Document Title
 
+        <div class="toc toc-1">
+
         1\.  [Header 1](#header1)
+        </div>
+        <div class="toc toc-2">
+
         1.1\.  [Header 1.a](#header1.a)
+        </div>
+        <div class="toc toc-1">
+
         2\.  [Header 2](#header2)
+        </div>
 
         <a name="header1"></a>
 
@@ -149,8 +158,14 @@ File 01.md
             '``` \n'
             '# Header 2\n')
 
-        result = """1\.  [Header 1](#header1)
+        result = """<div class="toc toc-1">
+        
+        1\.  [Header 1](#header1)
+        </div>
+        <div class="toc toc-1">
+
         2\.  [Header 2](#header2)
+        </div>
         <a name="header1"></a>
 
         # 1\. Header 1

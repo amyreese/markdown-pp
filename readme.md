@@ -21,18 +21,54 @@ and process that document when viewing the repository.
 
 [![Build Status](https://travis-ci.org/jreese/markdown-pp.svg?branch=master)](https://travis-ci.org/jreese/markdown-pp)
 
-1\.  [Installation and Usage](#installationandusage)  
-2\.  [Modules](#modules)  
-2.1\.  [Includes](#includes)  
-2.2\.  [IncludeURLs](#includeurls)  
-2.3\.  [IncludeCode](#includecode)  
-2.4\.  [Table of Contents](#tableofcontents)  
-2.5\.  [Reference](#reference)  
-2.6\.  [LaTeX Rendering](#latexrendering)  
-2.7\.  [YouTube Embeds](#youtubeembeds)  
-3\.  [Examples](#examples)  
-4\.  [Support](#support)  
-5\.  [References](#references)  
+<div class="toc toc-1">
+
+1\.  [Installation and Usage](#installationandusage)
+</div>
+<div class="toc toc-1">
+
+2\.  [Modules](#modules)
+</div>
+<div class="toc toc-2">
+
+2.1\.  [Includes](#includes)
+</div>
+<div class="toc toc-2">
+
+2.2\.  [IncludeURLs](#includeurls)
+</div>
+<div class="toc toc-2">
+
+2.3\.  [IncludeCode](#includecode)
+</div>
+<div class="toc toc-2">
+
+2.4\.  [Table of Contents](#tableofcontents)
+</div>
+<div class="toc toc-2">
+
+2.5\.  [Reference](#reference)
+</div>
+<div class="toc toc-2">
+
+2.6\.  [LaTeX Rendering](#latexrendering)
+</div>
+<div class="toc toc-2">
+
+2.7\.  [YouTube Embeds](#youtubeembeds)
+</div>
+<div class="toc toc-1">
+
+3\.  [Examples](#examples)
+</div>
+<div class="toc toc-1">
+
+4\.  [Support](#support)
+</div>
+<div class="toc toc-1">
+
+5\.  [References](#references)
+</div>
 
 <a name="installationandusage"></a>
 
