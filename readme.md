@@ -261,6 +261,20 @@ heading tag that Markdown would generate.
 
 <a name="reference"></a>
 
+Further a `div` element is added around the toc entires to be able to style the toc using the css classes `toc` and `toc-depth`
+
+```
+<div class="toc toc-1">
+
+1\.  [Test](#test)
+</div>
+<div class="toc toc-2">
+
+1.1\.  [Title](#title)
+</div> 
+```
+
+
 ### 2.5\. Reference
 
 Similarly, MarkdownPP can generate a list of references that follow Markdown's
