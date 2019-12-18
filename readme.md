@@ -259,8 +259,6 @@ markup.  The table is inserted into the document wherever the preprocessor finds
 Markdown header, and the headings are numbered hierarchically based on the
 heading tag that Markdown would generate.
 
-<a name="reference"></a>
-
 Further a `div` element is added around the toc entires to be able to style the toc using the css classes `toc` and `toc-depth`
 
 ```
@@ -274,6 +272,7 @@ Further a `div` element is added around the toc entires to be able to style the 
 </div> 
 ```
 
+<a name="reference"></a>
 
 ### 2.5\. Reference
 
