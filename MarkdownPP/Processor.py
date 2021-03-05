@@ -26,6 +26,9 @@ class Processor:
     transforms = {}
     modules = []
 
+    def __init__(self,encoding):
+        self.encoding = encoding
+    
     def register(self, module):
         """
         This method registers an individual module to be called when processing
