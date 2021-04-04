@@ -4,6 +4,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
+import sys
 
 
 class Module:
@@ -18,6 +19,9 @@ class Module:
     and 5 being "normal".
     """
 
+    def __init__(self):
+        self.encoding = sys.getdefaultencoding()
+    
     def transform(self, data):
         """
         This method should generate a list of Transform objects for each
