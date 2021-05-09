@@ -21,7 +21,7 @@ class Module:
 
     def __init__(self):
         self.encoding = sys.getdefaultencoding()
-    
+
     def transform(self, data):
         """
         This method should generate a list of Transform objects for each

@@ -12,6 +12,7 @@ if sys.version_info[0] != 2:
 
 
 class Processor:
+
     """
     Framework for allowing modules to modify the input data as a set of
     transforms. Once the original input data is loaded, the preprocessor
@@ -26,9 +27,9 @@ class Processor:
     transforms = {}
     modules = []
 
-    def __init__(self,encoding):
+    def __init__(self, encoding):
         self.encoding = encoding
-    
+
     def register(self, module):
         """
         This method registers an individual module to be called when processing

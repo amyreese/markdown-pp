@@ -52,7 +52,7 @@ class Include(Module):
 
     def include_file(self, filename, pwd="", shift=0):
         try:
-            f = open(filename, "r", encoding = self.encoding)
+            f = open(filename, "r", encoding=self.encoding)
             data = f.readlines()
             f.close()
 
