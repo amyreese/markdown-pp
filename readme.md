@@ -30,6 +30,7 @@ and process that document when viewing the repository.
 2.5\.  [Reference](#reference)  
 2.6\.  [LaTeX Rendering](#latexrendering)  
 2.7\.  [YouTube Embeds](#youtubeembeds)  
+2.8\.  [Execute a command](#executeacommand)  
 3\.  [Examples](#examples)  
 4\.  [Support](#support)  
 5\.  [References](#references)  
@@ -266,6 +267,30 @@ becomes
 
 [![Link to Youtube video](images/youtube/7aEYoP5-duY.png)](http://www.youtube.com/watch?v=7aEYoP5-duY)
 
+<a name="executeacommand"></a>
+
+### 2.8\. Execute a command
+
+With `!(EXEC cmd)` (or, if you prefer, `![EXEC cmd]`, or `!{EXEC cmd}`), it
+is possible to execute a command and insert the standard output result directly.
+
+For example:
+    !(EXEC echo "This is a test")
+
+Becomes:
+    This is a test
+
+To escape it, add a `\` to the command:
+    \!{EXEC "Will not be executed"}
+
+Make sure to not include any closing parenthesis, bracket or brace (depending on
+which delimiters you use) in the expression inside `!(EXEC ...)`
+
+This example will not work, and will produce a wrong output:
+    !(EXEC bash -c "(echo -n This is && echo a test)")
+
+Instead, use different delimiters:
+    !{EXEC bash -c "(echo -n This is && echo a test)"}
 
 <a name="examples"></a>
 
