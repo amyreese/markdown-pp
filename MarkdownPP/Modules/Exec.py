@@ -13,7 +13,7 @@ from MarkdownPP.Transform import Transform
 
 
 def trim_last_newline(s: str) -> str:
-    if s[-1] == '\n':
+    if len(s) > 0 and s[-1] == '\n':
         return s[:-1]
     else:
         return s
