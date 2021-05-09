@@ -400,7 +400,7 @@ This should not be expanded: \!(EXEC echo nope)
 Testing toto titi
 tralala zut
 Possibility to use other delimiters: yesno
-This should not be expanded: \!(EXEC echo nope)
+This should not be expanded: !(EXEC echo nope)
 """
         output = StringIO()
         MarkdownPP(input=input, modules=['exec'], output=output)

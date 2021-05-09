@@ -45,16 +45,36 @@ class Exec(Module):
                         + r'({}|{}|{})'
                         .format(withpar, withbrackets, withbraces))
 
+    # Same as above, but matches specifically those that were escaped
+    # For example: \!(EXEC cmd)
+    #
+    # Groups:
+    #   (1) The whole (EXEC cmd)
+    #   (2+) Shouldn't matter, but same as above
+    escapedexecre = re.compile(r'\\!'
+                               + r'({}|{}|{})'
+                               .format(withpar, withbrackets, withbraces))
+
     def transform(self, data):
         transforms = []
         for (n, line) in enumerate(data):
+            # Substitution of all !EXEC(...)
             matches = self.execre.finditer(line)
             content = line
             for match in matches:
                 content = self.do_exec(match, content)
+
+            # Renaming \!EXEC(..) -> !EXEC(..)
+            matches = self.escapedexecre.finditer(line)
+            for match in matches:
+                content = self.rename_escaped(match, content)
+
             transform = Transform(linenum=n, oper="swap", data=content)
             transforms.append(transform)
         return transforms
+
+    def rename_escaped(self, match, line):
+        return self.escapedexecre.sub("!" + match.group(1), line, count=1)
 
     def do_exec(self, match, line):
         # Find the right group
