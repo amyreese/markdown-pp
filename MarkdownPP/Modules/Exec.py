@@ -83,7 +83,6 @@ class Exec(Module):
             if execcmd is not None:
                 break
         assert (execcmd is not None)
-        print("About to execute:", execcmd)
         charbefore = match.group(1)
         subp = subprocess.run(execcmd, shell=True, stdout=subprocess.PIPE)
         result = str(subp.stdout, "utf-8")
