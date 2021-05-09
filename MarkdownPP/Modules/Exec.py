@@ -25,7 +25,25 @@ class Exec(Module):
     For example: !(EXEC date)
     """
 
-    execre = re.compile(r'(^|[^\\])!\(EXEC ([^\)]*)\)')
+    # Matches either !(EXEC cmd) or ![EXEC cmd] or !{EXEC cmd}
+    # Doesn't match if it's a \! instead of a !
+    # Also, if it's say ![EXEC cmd], then cmd should not have any ']' or else
+    #   the result will be wrong
+    # (I don't think there is a way to have a user-friendly mistake checker
+    # without coding a whole grammar)
+    #
+    # Groups:
+    #   (1) The potential character before '!'
+    #   (2) The whole (EXEC cmd) match (or [EXEC cmd], etc..)
+    #   (3) If it's a parenthesis match, the cmd
+    #   (4) If it's a bracket match, the cmd
+    #   (5) If it's a brace match, the cmd
+    withpar = r'\(EXEC ([^\)]*)\)'
+    withbrackets = r'\[EXEC ([^\]]*)\]'
+    withbraces = r'\{EXEC ([^\}]*)\}'
+    execre = re.compile(r'(^|[^\\])!'
+                        + r'({}|{}|{})'
+                        .format(withpar, withbrackets, withbraces))
 
     def transform(self, data):
         transforms = []
@@ -39,9 +57,15 @@ class Exec(Module):
         return transforms
 
     def do_exec(self, match, line):
-        execcmd = match.group(2)
+        # Find the right group
+        for i in range(3, 6):
+            execcmd = match.group(i)
+            if execcmd is not None:
+                break
+        assert (execcmd is not None)
+        print("About to execute:", execcmd)
         charbefore = match.group(1)
-        subp = subprocess.run(execcmd.split(' '), stdout=subprocess.PIPE)
+        subp = subprocess.run(execcmd, shell=True, stdout=subprocess.PIPE)
         result = str(subp.stdout, "utf-8")
         result = charbefore + trim_last_newline(result)
 

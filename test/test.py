@@ -392,12 +392,14 @@ bar"""
         input = StringIO("""
 Testing !(EXEC echo toto) !(EXEC echo "titi")
 !(EXEC echo tralala) zut
+Possibility to use other delimiters: !{EXEC bash -c "(echo -n yes && echo no)"}
 This should not be expanded: \!(EXEC echo nope)
 """)
 
         result = """
-Testing toto "titi"
+Testing toto titi
 tralala zut
+Possibility to use other delimiters: yesno
 This should not be expanded: \!(EXEC echo nope)
 """
         output = StringIO()
