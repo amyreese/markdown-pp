@@ -388,6 +388,22 @@ bar"""
         output.seek(0)
         self.assertEqual(output.read(), result)
 
+    def test_exec(self):
+        input = StringIO("""
+Testing !(EXEC echo toto) !(EXEC echo "titi")
+!(EXEC echo tralala) zut
+This should not be expanded: \!(EXEC echo nope)
+""")
+
+        result = """
+Testing toto "titi"
+tralala zut
+This should not be expanded: \!(EXEC echo nope)
+"""
+        output = StringIO()
+        MarkdownPP(input=input, modules=['exec'], output=output)
+        output.seek(0)
+        self.assertEqual(output.read(), result)
 
 
 if __name__ == '__main__':
