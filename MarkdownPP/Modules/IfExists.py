@@ -15,15 +15,15 @@ from MarkdownPP.Transform import Transform
 
 class IfExists(Module):
     """
-    Module that tests for a file existence. If the file exists, all the lines following the tag are included.
-     until the same tag is found.
+    Module that tests for a file existence. If the file exists, all the lines
+    following the tag are included, until the end tag is found.
      If the file does not exist, the entire block is skipped.
     """
-    
+
     # matches !INCLUDE directives in .mdpp files
     ifexistsre = re.compile(r"^!IFEXISTS\s+(?:\"([^\"]+)\"|'([^']+)')\s*$")
-    endifexistsre=re.compile(r"^!ENDIFEXISTS\s*")
-    
+    endifexistsre = re.compile(r"^!ENDIFEXISTS\s*")
+
     def transform(self, data):
         transforms = []
         skip_content = False
@@ -36,7 +36,8 @@ class IfExists(Module):
             if match:
                 drop_line = True
                 in_block = True
-                if not self.file_exists(match): skip_content = True
+                if not self.file_exists(match):
+                    skip_content = True
             else:
                 if in_block:
                     match = self.endifexistsre.search(line)
