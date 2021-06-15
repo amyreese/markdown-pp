@@ -30,6 +30,11 @@ class Include(Module):
     # matches unescaped formatting characters such as ` or _
     formatre = re.compile(r"[^\\]?[_*`]")
 
+    # matches code block start and stop
+    #  code blocks can also be indented by 4 spaces or a tab
+    # in which case we don't car because it does not match titlere
+    codeblockre = re.compile(r"```")
+
     # includes should happen before anything else
     priority = 0
 
@@ -55,12 +60,17 @@ class Include(Module):
             f = open(filename, "r", encoding = self.encoding)
             data = f.readlines()
             f.close()
+            in_codeblock = False
 
             # line by line, apply shift and recursively include file data
             linenum = 0
             includednum = 0
             for line in data:
                 match = self.includere.search(line)
+
+                if self.codeblockre.search(line):
+                    in_codeblock = not in_codeblock
+
                 if match:
                     dirname = path.dirname(filename)
                     data[linenum:linenum+1] = self.include(match, dirname)
@@ -72,7 +82,7 @@ class Include(Module):
                 if shift:
 
                     titlematch = self.titlere.search(line)
-                    if titlematch:
+                    if titlematch and not in_codeblock:
                         to_del = []
                         for _ in range(shift):
                             # Skip underlines with empty above text
