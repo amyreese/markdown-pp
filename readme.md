@@ -30,6 +30,7 @@ and process that document when viewing the repository.
 2.5\.  [Reference](#reference)  
 2.6\.  [LaTeX Rendering](#latexrendering)  
 2.7\.  [YouTube Embeds](#youtubeembeds)  
+2.8\.  [Conditional blocks](#conditionalblocks)  
 3\.  [Examples](#examples)  
 4\.  [Support](#support)  
 5\.  [References](#references)  
@@ -266,6 +267,22 @@ becomes
 
 [![Link to Youtube video](images/youtube/7aEYoP5-duY.png)](http://www.youtube.com/watch?v=7aEYoP5-duY)
 
+
+<a name="conditionalblocks"></a>
+
+### 2.8\. Conditional blocks
+
+Based on the existence of a file, a block can be included or discarded, e.g. :
+
+    !IFEXISTS "/tmp/foobar.txt"
+    The file exists and will be included here
+    !INCLUDE "/tmp/foobar.txt"
+    !ENDIFEXISTS
+
+will not be displayed if `/tmp/foobar.txt` does not exist, but if it does exist:
+
+     The file exists and will be included here
+     <FOOBAR.TXT CONTENT>
 
 <a name="examples"></a>
 
