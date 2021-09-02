@@ -9,6 +9,7 @@ from MarkdownPP import Modules
 from .Processor import Processor
 import sys
 
+
 class MarkdownPP:
     """
     Simplified front-end interface for the Processor and Module systems.
@@ -17,7 +18,7 @@ class MarkdownPP:
     """
 
     def __init__(self, input=None, output=None, modules=None, encoding=None):
-        if encoding == None:
+        if encoding is None:
             encoding = sys.getdefaultencoding()
         pp = Processor(encoding)
 
