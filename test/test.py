@@ -56,6 +56,22 @@ Title
         output.seek(0)
         self.assertEqual(output.read(), result)
 
+    def test_conditional_test_file_no_file(self):
+        input = StringIO('foo\n!IFEXISTS "datafiles/non_existing_file.mdpp"\nbar\n!ENDIFEXISTS')
+        result = 'foo\n'
+        output = StringIO()
+        MarkdownPP(input=input, modules=['ifexists'], output=output)
+        output.seek(0)
+        self.assertEqual(output.read(), result)
+
+    def test_conditional_test_file_existing_file(self):
+        input = StringIO('foo\n!IFEXISTS "datafiles/test_empty_glob.mdpp"\nbar\n!ENDIFEXISTS')
+        result = 'foo\nbar\n'
+        output = StringIO()
+        MarkdownPP(input=input, modules=['ifexists'], output=output)
+        output.seek(0)
+        self.assertEqual(output.read(), result)
+
     def test_empty_glob_should_not_lead_to_index_errors(self):
         input = StringIO('!INCLUDE "datafiles/test_empty_glob.mdpp"\n')
         result = '# Test Header\n'
