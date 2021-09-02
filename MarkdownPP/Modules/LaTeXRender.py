@@ -100,7 +100,7 @@ class LaTeXRender(Module):
         formula = formula.replace("$", "")
         encoded_formula = formula.replace("%", "[comment]").replace("+", "%2B")
         display_formula = formula.replace("\n", "")
-        print('Rendering: %s ...' % display_formula)
+        # print('Rendering: %s ...' % display_formula)
 
         # Prepare POST request to QuickLaTeX via ProblemSetMarmoset
         # (for added processing)
