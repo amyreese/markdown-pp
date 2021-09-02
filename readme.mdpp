@@ -237,6 +237,28 @@ becomes
 
 !VIDEO "http://www.youtube.com/embed/7aEYoP5-duY"
 
+### Execute a command
+
+With `\!(EXEC cmd)` (or, if you prefer, `\![EXEC cmd]`, or `\!{EXEC cmd}`), it
+is possible to execute a command and insert the standard output result directly.
+
+For example:
+    \!(EXEC echo "This is a test")
+
+Becomes:
+    !(EXEC echo "This is a test")
+
+To escape it, add a `\` to the command:
+    \\!{EXEC "Will not be executed"}
+
+Make sure to not include any closing parenthesis, bracket or brace (depending on
+which delimiters you use) in the expression inside `\!(EXEC ...)`
+
+This example will not work, and will produce a wrong output:
+    \!(EXEC bash -c "(echo -n This is && echo a test)")
+
+Instead, use different delimiters:
+    \!{EXEC bash -c "(echo -n This is && echo a test)"}
 
 Examples
 --------
