@@ -2,6 +2,8 @@
 Markdown Preprocessor (MarkdownPP)
 ==================================
 
+**NOTICE: This project is no longer actively maintained. It will not receive any future releases.**
+
 The Markdown Preprocessor is a Python module designed to add extended features
 on top of the excellent Markdown syntax defined by John Gruber.  These additions
 are mainly focused on creating larger technical documents without needing to use
@@ -311,10 +313,8 @@ The preprocessor would generate the following Markdown-ready document file.md:
 4\. Support
 -------
 
-If you find any problems with MarkdownPP, or have any feature requests, please
-report them to [GitHub][repo], and I will respond when possible.  Code
-contributions are *always* welcome, and ideas for new modules, or additions to
-existing modules, are also appreciated.
+While the project should work on most recent versions of Python,
+this project is no longer supported. 
 
 
 <a name="references"></a>
